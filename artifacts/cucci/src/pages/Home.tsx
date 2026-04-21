@@ -1,0 +1,425 @@
+import { useState, useEffect } from "react";
+
+export default function Home() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener("resize", check);
+    return () => window.removeEventListener("resize", check);
+  }, []);
+
+  useEffect(() => {
+    if (menuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [menuOpen]);
+
+  const navItems = ["Collections", "Sweetsuits", "Intimates", "Cuccicare"];
+
+  return (
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
+
+      {/* HERO SECTION */}
+      <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
+        {/* Background Video */}
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            zIndex: 0,
+          }}
+        >
+          <source src="/hero.mov" type="video/mp4" />
+          <source src="/hero.mov" type="video/quicktime" />
+        </video>
+
+        {/* Subtle overlay */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background: "rgba(10,8,6,0.18)",
+            zIndex: 1,
+          }}
+        />
+
+        {/* DESKTOP HEADER */}
+        {!isMobile && (
+          <header
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 10,
+              display: "flex",
+              alignItems: "flex-start",
+              padding: "36px 48px",
+            }}
+          >
+            {/* Logo — left vertical wordmark */}
+            <div
+              style={{
+                writingMode: "vertical-rl",
+                textOrientation: "mixed",
+                transform: "rotate(180deg)",
+                color: "#fff",
+                fontSize: "13px",
+                letterSpacing: "0.3em",
+                fontFamily: "'Georgia', serif",
+                fontWeight: 400,
+                textTransform: "uppercase",
+                userSelect: "none",
+                marginTop: 4,
+              }}
+            >
+              CUCCI
+            </div>
+
+            {/* Center nav */}
+            <nav
+              style={{
+                flex: 1,
+                display: "flex",
+                justifyContent: "center",
+                gap: "48px",
+              }}
+            >
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  style={{
+                    color: "#fff",
+                    fontSize: "13px",
+                    letterSpacing: "0.1em",
+                    textDecoration: "none",
+                    fontFamily: "'Georgia', serif",
+                    fontWeight: 400,
+                    transition: "opacity 0.2s",
+                    opacity: 0.92,
+                  }}
+                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.55")}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.92")}
+                >
+                  {item}
+                </a>
+              ))}
+            </nav>
+
+            {/* Right: Search / Log In / Cart */}
+            <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
+              {["Search", "Log In", "(0)"].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  style={{
+                    color: "#fff",
+                    fontSize: "11px",
+                    letterSpacing: "0.18em",
+                    textDecoration: "none",
+                    textTransform: "uppercase",
+                    fontFamily: "'Georgia', serif",
+                    fontWeight: 400,
+                    opacity: 0.85,
+                    transition: "opacity 0.2s",
+                  }}
+                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.45")}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.85")}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+          </header>
+        )}
+
+        {/* MOBILE HEADER */}
+        {isMobile && (
+          <header
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              zIndex: 10,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "24px 24px",
+            }}
+          >
+            {/* Hamburger */}
+            <button
+              onClick={() => setMenuOpen(true)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: "5px",
+              }}
+              aria-label="Open menu"
+            >
+              {[0, 1, 2].map((i) => (
+                <span
+                  key={i}
+                  style={{
+                    display: "block",
+                    width: "22px",
+                    height: "1px",
+                    background: "#fff",
+                  }}
+                />
+              ))}
+            </button>
+
+            {/* Center logo */}
+            <span
+              style={{
+                color: "#fff",
+                fontSize: "14px",
+                letterSpacing: "0.4em",
+                fontFamily: "'Georgia', serif",
+                textTransform: "uppercase",
+              }}
+            >
+              CUCCI
+            </span>
+
+            {/* Cart */}
+            <a
+              href="#"
+              style={{
+                color: "#fff",
+                fontSize: "11px",
+                letterSpacing: "0.15em",
+                textDecoration: "none",
+                fontFamily: "'Georgia', serif",
+                opacity: 0.88,
+              }}
+            >
+              (0)
+            </a>
+          </header>
+        )}
+      </section>
+
+      {/* BELOW HERO — Split grid */}
+      <section style={{ display: "flex", width: "100%", flexDirection: isMobile ? "column" : "row" }}>
+        {/* LEFT: Sweetsuits */}
+        <div
+          style={{
+            flex: 1,
+            position: "relative",
+            overflow: "hidden",
+            cursor: "pointer",
+            minHeight: isMobile ? "55vw" : "52vw",
+          }}
+        >
+          <img
+            src="/sweetsuits.png"
+            alt="Sweetsuits"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              transition: "transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94)",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1.05)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1)"; }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "32px",
+              left: "36px",
+              color: "#fff",
+              fontSize: "11px",
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              fontFamily: "'Georgia', serif",
+              fontWeight: 400,
+              mixBlendMode: "normal",
+              textShadow: "0 1px 12px rgba(0,0,0,0.18)",
+            }}
+          >
+            Sweetsuits
+          </div>
+        </div>
+
+        {/* RIGHT: Cucci Care */}
+        <div
+          style={{
+            flex: 1,
+            position: "relative",
+            overflow: "hidden",
+            cursor: "pointer",
+            minHeight: isMobile ? "55vw" : "52vw",
+          }}
+        >
+          <img
+            src="/cuccicare.png"
+            alt="Cucci Care"
+            style={{
+              width: "100%",
+              height: "100%",
+              objectFit: "cover",
+              display: "block",
+              transition: "transform 0.7s cubic-bezier(0.25,0.46,0.45,0.94)",
+            }}
+            onMouseEnter={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1.05)"; }}
+            onMouseLeave={(e) => { (e.currentTarget as HTMLImageElement).style.transform = "scale(1)"; }}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: "32px",
+              left: "36px",
+              color: "#fff",
+              fontSize: "11px",
+              letterSpacing: "0.3em",
+              textTransform: "uppercase",
+              fontFamily: "'Georgia', serif",
+              fontWeight: 400,
+              textShadow: "0 1px 12px rgba(0,0,0,0.18)",
+            }}
+          >
+            Cucci Care
+          </div>
+        </div>
+      </section>
+
+      {/* MOBILE FULLSCREEN MENU OVERLAY */}
+      {isMobile && menuOpen && (
+        <div
+          style={{
+            position: "fixed",
+            inset: 0,
+            zIndex: 100,
+            background: "#f5f2ee",
+            display: "flex",
+            flexDirection: "column",
+            padding: "28px 28px 40px",
+          }}
+        >
+          {/* Top row */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "36px" }}>
+            <div style={{ display: "flex", gap: "24px", flexDirection: "column" }}>
+              {["Log In", "Create Account"].map((item) => (
+                <a
+                  key={item}
+                  href="#"
+                  style={{
+                    color: "#2a2420",
+                    fontSize: "11px",
+                    letterSpacing: "0.2em",
+                    textTransform: "uppercase",
+                    textDecoration: "none",
+                    fontFamily: "'Georgia', serif",
+                    opacity: 0.65,
+                  }}
+                >
+                  {item}
+                </a>
+              ))}
+            </div>
+            <button
+              onClick={() => setMenuOpen(false)}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: "20px",
+                color: "#2a2420",
+                fontFamily: "'Georgia', serif",
+                lineHeight: 1,
+                padding: 0,
+              }}
+              aria-label="Close menu"
+            >
+              ×
+            </button>
+          </div>
+
+          {/* Search */}
+          <div style={{ marginBottom: "40px", borderBottom: "1px solid rgba(42,36,32,0.2)", paddingBottom: "12px" }}>
+            <input
+              type="search"
+              placeholder="Search"
+              style={{
+                width: "100%",
+                background: "none",
+                border: "none",
+                outline: "none",
+                fontSize: "14px",
+                fontFamily: "'Georgia', serif",
+                color: "#2a2420",
+                letterSpacing: "0.08em",
+              }}
+            />
+          </div>
+
+          {/* Nav items */}
+          <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "center" }}>
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href="#"
+                onClick={() => setMenuOpen(false)}
+                style={{
+                  color: "#2a2420",
+                  fontSize: "22px",
+                  letterSpacing: "0.12em",
+                  textDecoration: "none",
+                  fontFamily: "'Georgia', serif",
+                  fontWeight: 400,
+                }}
+              >
+                {item}
+              </a>
+            ))}
+          </nav>
+
+          {/* Bottom socials */}
+          <div style={{ display: "flex", gap: "24px", justifyContent: "center" }}>
+            {["Instagram", "Vimeo", "TikTok"].map((s) => (
+              <a
+                key={s}
+                href="#"
+                style={{
+                  color: "#2a2420",
+                  fontSize: "10px",
+                  letterSpacing: "0.2em",
+                  textTransform: "uppercase",
+                  textDecoration: "none",
+                  fontFamily: "'Georgia', serif",
+                  opacity: 0.55,
+                }}
+              >
+                {s}
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

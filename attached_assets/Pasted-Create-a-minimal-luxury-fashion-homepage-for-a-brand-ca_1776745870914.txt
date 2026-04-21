@@ -1,0 +1,101 @@
+Create a minimal luxury fashion homepage for a brand called CUCCI.
+
+OVERALL DIRECTION:
+- Editorial, cinematic, high-fashion aesthetic
+- Ultra minimal layout
+- Refined, premium feel (similar to Paloma Wool / Jacquemus style)
+- Serif typography for navigation
+- Clean spacing, no clutter, no template feel
+
+IMPORTANT HERO REQUIREMENT:
+The top section must be a full-screen background video.
+
+VIDEO BEHAVIOR:
+- background layer (absolute fill)
+- fills entire viewport (object-fit: cover)
+- autoplay, muted, loop, plays inline (mobile safe)
+- subtle overlay (10–20% dark or neutral tone)
+- no visible controls
+- cinematic, not promotional
+
+CONTENT OVER VIDEO:
+- transparent header
+- no boxed content
+- no heavy text
+- everything feels light and floating
+
+HEADER (DESKTOP):
+- left: vertical CUCCI wordmark/logo
+- center navigation:
+  Collections
+  Sweatsuits
+  Intimates
+  Cucci Care
+- right:
+  Search
+  Log In
+  Cart (0)
+
+LAYOUT BELOW HERO:
+- full-width split grid (2 columns)
+
+LEFT TILE:
+- label: SWEATSUITS
+- image-based tile
+- subtle hover zoom (scale 1 → 1.05)
+
+RIGHT TILE:
+- label: CUCCI CARE
+- image-based tile
+- same hover behavior
+
+TILES STYLE:
+- minimal overlay text
+- editorial composition
+- no borders, no shadows
+- clean typography
+
+MOBILE BEHAVIOR:
+- hero video still fills screen
+- header becomes:
+  - left: hamburger
+  - center: CUCCI logo
+  - right: cart (0)
+
+MOBILE MENU (FULLSCREEN OVERLAY):
+- soft light background
+- top row:
+  Log In
+  Create Account
+  Close (X)
+- search input with thin underline
+- centered nav items:
+  Collections
+  Sweatsuits
+  Intimates
+  Cucci Care
+- bottom:
+  Instagram
+  Vimeo
+  TikTok
+
+STYLE RULES:
+- no bright colors
+- no gradients
+- no drop shadows
+- minimal transitions
+- smooth hover only
+- lots of whitespace
+- fashion/editorial tone over e-commerce tone
+
+TECH:
+- video must be a true background layer (not inside a card/component)
+- layout must be responsive for desktop + mobile
+- optimize for performance
+
+IMPORTANT:
+- do NOT use default “Man/Woman” structure
+- use only:
+  Collections / Sweatsuits / Intimates / Cucci Care
+- do NOT make it look like a Shopify template
+- prioritize cinematic feel over UI density
