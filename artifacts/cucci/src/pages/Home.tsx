@@ -3,14 +3,7 @@ import { useState, useEffect, useRef } from "react";
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  useEffect(() => {
-    const vid = videoRef.current;
-    if (!vid) return;
-    vid.muted = true;
-    vid.play().catch(() => {});
-  }, []);
+  const gifRef = useRef<HTMLImageElement>(null);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -25,7 +18,9 @@ export default function Home() {
     } else {
       document.body.style.overflow = "";
     }
-    return () => { document.body.style.overflow = ""; };
+    return () => {
+      document.body.style.overflow = "";
+    };
   }, [menuOpen]);
 
   const navItems = ["Collections", "Sweetsuits", "Intimates", "Cuccicare"];
@@ -33,13 +28,10 @@ export default function Home() {
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
+        <img
+          ref={gifRef}
+          src="/hero.gif"
+          alt="CUCCI background"
           style={{
             position: "absolute",
             top: 0,
@@ -49,9 +41,7 @@ export default function Home() {
             objectFit: "cover",
             zIndex: 0,
           }}
-        >
-          <source src="/hero.gif" type="image/gif" />
-        </video>
+        />
 
         <div
           style={{
