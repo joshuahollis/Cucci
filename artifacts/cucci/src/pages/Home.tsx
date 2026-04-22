@@ -220,26 +220,7 @@ export default function Home() {
             padding: "28px 28px 40px",
           }}
         >
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "36px" }}>
-            <div style={{ display: "flex", gap: "24px", flexDirection: "column" }}>
-              {["Log In", "Create Account"].map((item) => (
-                <a
-                  key={item}
-                  href="#"
-                  style={{
-                    color: "#2a2420",
-                    fontSize: "11px",
-                    letterSpacing: "0.2em",
-                    textTransform: "uppercase",
-                    textDecoration: "none",
-                    fontFamily: "'Georgia', serif",
-                    opacity: 0.65,
-                  }}
-                >
-                  {item}
-                </a>
-              ))}
-            </div>
+          <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-start", marginBottom: "36px" }}>
             <button
               onClick={() => setMenuOpen(false)}
               style={{
