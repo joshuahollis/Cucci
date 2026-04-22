@@ -65,7 +65,8 @@ export default function Home() {
               padding: "36px 48px",
             }}
           >
-            <div
+            <a
+              href="/"
               style={{
                 writingMode: "vertical-rl",
                 textOrientation: "mixed",
@@ -78,10 +79,11 @@ export default function Home() {
                 textTransform: "uppercase",
                 userSelect: "none",
                 marginTop: 4,
+                textDecoration: "none",
               }}
             >
               CUCCI
-            </div>
+            </a>
             <nav
               style={{
                 flex: 1,
@@ -176,17 +178,19 @@ export default function Home() {
                 />
               ))}
             </button>
-            <span
+            <a
+              href="/"
               style={{
                 color: "#fff",
                 fontSize: "14px",
                 letterSpacing: "0.4em",
                 fontFamily: "'Georgia', serif",
                 textTransform: "uppercase",
+                textDecoration: "none",
               }}
             >
               CUCCI
-            </span>
+            </a>
             <a
               href="#"
               style={{
