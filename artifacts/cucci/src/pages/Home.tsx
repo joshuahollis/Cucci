@@ -32,10 +32,7 @@ export default function Home() {
 
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
-
-      {/* HERO SECTION */}
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-        {/* Background Video */}
         <video
           ref={videoRef}
           autoPlay
@@ -53,11 +50,9 @@ export default function Home() {
             zIndex: 0,
           }}
         >
-          <source src="/hero.mov" type="video/mp4" />
-          <source src="/hero.mov" type="video/quicktime" />
+          <source src="/hero.gif" type="image/gif" />
         </video>
 
-        {/* Subtle overlay */}
         <div
           style={{
             position: "absolute",
@@ -67,7 +62,6 @@ export default function Home() {
           }}
         />
 
-        {/* DESKTOP HEADER */}
         {!isMobile && (
           <header
             style={{
@@ -81,7 +75,6 @@ export default function Home() {
               padding: "36px 48px",
             }}
           >
-            {/* Logo — left vertical wordmark */}
             <div
               style={{
                 writingMode: "vertical-rl",
@@ -99,8 +92,6 @@ export default function Home() {
             >
               CUCCI
             </div>
-
-            {/* Center nav */}
             <nav
               style={{
                 flex: 1,
@@ -130,8 +121,6 @@ export default function Home() {
                 </a>
               ))}
             </nav>
-
-            {/* Right: Search / Log In / Cart */}
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
               {["Search", "Log In", "(0)"].map((item) => (
                 <a
@@ -158,7 +147,6 @@ export default function Home() {
           </header>
         )}
 
-        {/* MOBILE HEADER */}
         {isMobile && (
           <header
             style={{
@@ -173,7 +161,6 @@ export default function Home() {
               padding: "24px 24px",
             }}
           >
-            {/* Hamburger */}
             <button
               onClick={() => setMenuOpen(true)}
               style={{
@@ -199,8 +186,6 @@ export default function Home() {
                 />
               ))}
             </button>
-
-            {/* Center logo */}
             <span
               style={{
                 color: "#fff",
@@ -212,8 +197,6 @@ export default function Home() {
             >
               CUCCI
             </span>
-
-            {/* Cart */}
             <a
               href="#"
               style={{
@@ -231,7 +214,6 @@ export default function Home() {
         )}
       </section>
 
-      {/* MOBILE FULLSCREEN MENU OVERLAY */}
       {isMobile && menuOpen && (
         <div
           style={{
@@ -244,7 +226,6 @@ export default function Home() {
             padding: "28px 28px 40px",
           }}
         >
-          {/* Top row */}
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "36px" }}>
             <div style={{ display: "flex", gap: "24px", flexDirection: "column" }}>
               {["Log In", "Create Account"].map((item) => (
@@ -282,8 +263,6 @@ export default function Home() {
               ×
             </button>
           </div>
-
-          {/* Search */}
           <div style={{ marginBottom: "40px", borderBottom: "1px solid rgba(42,36,32,0.2)", paddingBottom: "12px" }}>
             <input
               type="search"
@@ -300,8 +279,6 @@ export default function Home() {
               }}
             />
           </div>
-
-          {/* Nav items */}
           <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "center" }}>
             {navItems.map((item) => (
               <a
@@ -321,8 +298,6 @@ export default function Home() {
               </a>
             ))}
           </nav>
-
-          {/* Bottom socials */}
           <div style={{ display: "flex", gap: "24px", justifyContent: "center" }}>
             {["Instagram", "Vimeo", "TikTok"].map((s) => (
               <a
