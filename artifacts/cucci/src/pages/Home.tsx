@@ -62,7 +62,7 @@ export default function Home() {
               zIndex: 10,
               display: "flex",
               alignItems: "flex-start",
-              padding: "36px 48px",
+              padding: "36px 64px 36px 48px",
             }}
           >
             <a
@@ -89,7 +89,8 @@ export default function Home() {
                 flex: 1,
                 display: "flex",
                 justifyContent: "center",
-                gap: "48px",
+                gap: "56px",
+                marginLeft: "24px",
               }}
             >
               {navItems.map((item) => (
@@ -114,7 +115,7 @@ export default function Home() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
-              {["Search", "Log In", "(0)"].map((item) => (
+              {['Search', 'Log In', '(0)'].map((item) => (
                 <a
                   key={item}
                   href="#"
