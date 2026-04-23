@@ -74,7 +74,7 @@ export default function Collections() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
-              {["Search", "Log In", "(0)"].map((item) => (
+              {["Search", "(0)"].map((item) => (
                 <a
                   key={item}
                   href="#"
