@@ -55,7 +55,7 @@ export default function Collections() {
               CUCCI
             </a>
             <nav style={{ flex: 1, display: "flex", justifyContent: "center", gap: "56px", marginLeft: "24px" }}>
-              {["Collections", "Sweetsuits", "Intimates", "Cuccicare"].map((item) => (
+              {["Collections", "Intimates", "Cuccicare"].map((item) => (
                 <a
                   key={item}
                   href={item === "Collections" ? "/collections" : "#"}
@@ -66,7 +66,7 @@ export default function Collections() {
                     textDecoration: "none",
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
-                    opacity: 0.92,
+                    opacity: item === "Collections" ? 0.55 : 0.92,
                   }}
                 >
                   {item}

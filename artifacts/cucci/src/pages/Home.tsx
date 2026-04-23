@@ -23,7 +23,7 @@ export default function Home() {
     };
   }, [menuOpen]);
 
-  const navItems = ["Collections", "Sweetsuits", "Intimates", "Cuccicare"];
+  const navItems = ["Collections", "Intimates", "Cuccicare"];
 
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
@@ -96,7 +96,7 @@ export default function Home() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href="#"
+                  href={item === "Collections" ? "/collections" : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -259,7 +259,7 @@ export default function Home() {
             {navItems.map((item) => (
               <a
                 key={item}
-                href="#"
+                href={item === "Collections" ? "/collections" : "#"}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   color: "#2a2420",
