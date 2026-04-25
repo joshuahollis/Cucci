@@ -247,7 +247,7 @@ export default function Home() {
           <img
             src={soapsImage}
             alt="Collections"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center" }}
           />
           <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.14)" }} />
           <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
