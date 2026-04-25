@@ -265,9 +265,9 @@ export default function Home() {
           }}
         >
           <img
-            src={soapsImage}
-            alt="Soap"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "right bottom" }}
+            src={intimatesImage}
+            alt="Intimates"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           />
           <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
             Intimates
