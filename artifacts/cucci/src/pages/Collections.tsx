@@ -20,7 +20,7 @@ export default function Collections() {
     };
   }, [menuOpen, isSearchOpen]);
 
-  const navItems = useMemo(() => ["Collections", "Intimates", "Cucci Care"], []);
+  const navItems = useMemo(() => [], []);
 
   const closeSearch = () => setIsSearchOpen(false);
 
@@ -245,11 +245,6 @@ export default function Collections() {
               </div>
               <div style={{ position: "relative", width: "100%" }}>
                 <input aria-label="Search" placeholder="Search" style={{ width: "100%", border: "none", outline: "none", background: "transparent", fontSize: isMobile ? "18px" : "22px", color: "#111", padding: "0 0 12px", borderBottom: "1px solid #111", fontFamily: "'Georgia', serif" }} />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "16px", fontSize: isMobile ? "22px" : "34px", textTransform: "uppercase", letterSpacing: "0.04em", fontFamily: "Arial, Helvetica, sans-serif" }}>
-                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Collections</a>
-                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Intimates</a>
-                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Cucci Care</a>
               </div>
             </div>
           </motion.div>
