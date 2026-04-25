@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "@/pages/Home";
 import Collections from "@/pages/Collections";
 import Gallery from "@/pages/Gallery";
+import CucciCare from "@/pages/CucciCare";
 
 const queryClient = new QueryClient();
 
@@ -12,6 +13,7 @@ function Router() {
       <Route path="/" component={Home} />
       <Route path="/collections" component={Collections} />
       <Route path="/gallery" component={Gallery} />
+      <Route path="/cuccicare" component={CucciCare} />
     </Switch>
   );
 }
