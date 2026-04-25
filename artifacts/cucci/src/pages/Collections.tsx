@@ -26,8 +26,8 @@ export default function Collections() {
   const navItems = ["Collections", "Intimates", "Cuccicare"];
 
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh", width: "100vw", overflowX: "hidden" }}>
-      <section style={{ position: "relative", width: "100%", height: isMobile ? "497px" : "497px", overflow: "hidden" }}>
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
+      <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
         <img
           ref={gifRef}
           src="/collections.gif"
@@ -63,9 +63,9 @@ export default function Collections() {
         )}
       </section>
 
-      <section style={{ display: "flex", width: "100%", flexDirection: isMobile ? "column" : "row", margin: 0, padding: 0 }}>
-        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "180px", background: "#e9e4dc" }} />
-        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "180px", background: "#ddd7cf" }} />
+      <section style={{ display: "flex", width: "100%", flexDirection: isMobile ? "column" : "row" }}>
+        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "34vw", background: "#e9e4dc" }} />
+        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "34vw", background: "#ddd7cf" }} />
       </section>
 
       {isMobile && menuOpen && (
