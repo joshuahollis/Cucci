@@ -1,9 +1,10 @@
-import { useState, useEffect, useRef } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { useEffect, useMemo, useState } from "react";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
-  const gifRef = useRef<HTMLImageElement>(null);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 768);
@@ -13,23 +14,20 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (menuOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
+    document.body.style.overflow = menuOpen || isSearchOpen ? "hidden" : "";
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen]);
+  }, [menuOpen, isSearchOpen]);
 
-  const navItems = ["Collections", "Intimates", "Cuccicare"];
+  const navItems = useMemo(() => ["Collections", "Intimates", "Cuccicare"], []);
+
+  const closeSearch = () => setIsSearchOpen(false);
 
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
         <img
-          ref={gifRef}
           src="/hero.gif"
           alt="CUCCI background"
           style={{
@@ -71,7 +69,8 @@ export default function Home() {
                 writingMode: "vertical-rl",
                 textOrientation: "mixed",
                 transform: "rotate(180deg)",
-                color: "#fff",
+                color: isSearchOpen ? "#111" : "#fff",
+                transition: "color 0.2s ease",
                 fontSize: "13px",
                 letterSpacing: "0.3em",
                 fontFamily: "'Georgia', serif",
@@ -115,12 +114,29 @@ export default function Home() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
-              {['Search', '(0)'].map((item) => (
-                <a
-                  key={item}
-                  href="#"
-                  style={{
-                    color: "#fff",
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                style={{
+                  color: "#fff",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  letterSpacing: "0.18em",
+                  textDecoration: "none",
+                  textTransform: "uppercase",
+                  fontFamily: "'Georgia', serif",
+                  fontWeight: 400,
+                  opacity: 0.85,
+                }}
+              >
+                Search
+              </button>
+              <a
+                href="#"
+                style={{
+                  color: "#fff",
                     fontSize: "11px",
                     letterSpacing: "0.18em",
                     textDecoration: "none",
@@ -133,9 +149,8 @@ export default function Home() {
                   onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.45")}
                   onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.85")}
                 >
-                  {item}
+                  (0)
                 </a>
-              ))}
             </div>
           </header>
         )}
@@ -182,7 +197,8 @@ export default function Home() {
             <a
               href="/"
               style={{
-                color: "#fff",
+                color: isSearchOpen ? "#111" : "#fff",
+                transition: "color 0.2s ease",
                 fontSize: "14px",
                 letterSpacing: "0.4em",
                 fontFamily: "'Georgia', serif",
@@ -192,10 +208,14 @@ export default function Home() {
             >
               CUCCI
             </a>
-            <a
-              href="#"
+            <button
+              onClick={() => setIsSearchOpen(true)}
               style={{
                 color: "#fff",
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
                 fontSize: "11px",
                 letterSpacing: "0.15em",
                 textDecoration: "none",
@@ -204,7 +224,7 @@ export default function Home() {
               }}
             >
               Search
-            </a>
+            </button>
           </header>
         )}
       </section>
@@ -282,6 +302,52 @@ export default function Home() {
           </div>
         </div>
       )}
+      <AnimatePresence>
+        {isSearchOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            onClick={closeSearch}
+            style={{
+              position: "fixed",
+              inset: 0,
+              zIndex: 90,
+              background: "rgba(255,255,255,0.9)",
+              backdropFilter: "blur(14px)",
+              WebkitBackdropFilter: "blur(14px)",
+            }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{
+                width: "100%",
+                height: "100%",
+                padding: isMobile ? "22px 18px" : "28px 32px",
+                color: "#111",
+                display: "flex",
+                flexDirection: "column",
+                gap: "28px",
+              }}
+            >
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+                <a href="/" style={{ color: "#111", textDecoration: "none" }}>CUCCI</a>
+                <button onClick={closeSearch} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#111", font: "inherit" }}>Close</button>
+              </div>
+              <div style={{ position: "relative", width: "100%" }}>
+                <input aria-label="Search" placeholder="Search" style={{ width: "100%", border: "none", outline: "none", background: "transparent", fontSize: isMobile ? "18px" : "22px", color: "#111", padding: "0 0 12px", borderBottom: "1px solid #111", fontFamily: "'Georgia', serif" }} />
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: "16px", fontSize: isMobile ? "22px" : "34px", textTransform: "uppercase", letterSpacing: "0.04em", fontFamily: "Arial, Helvetica, sans-serif" }}>
+                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Woman</a>
+                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Man</a>
+                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Projects and Collaborations</a>
+                <a href="#" style={{ color: "#111", textDecoration: "none" }}>Collections</a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
