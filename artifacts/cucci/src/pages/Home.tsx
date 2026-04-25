@@ -20,14 +20,13 @@ export default function Home() {
     };
   }, [menuOpen, isSearchOpen]);
 
-  const navItems = useMemo(() => ["Collections", "Intimates", "Cucci Care"], []);
+  const navItems = useMemo(() => ["Collections", "Intimates", "Cuccicare"], []);
 
   const closeSearch = () => setIsSearchOpen(false);
 
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-            <a href="/cucci-care" style={{ display: "block", width: "100%", height: "100%" }}>
           <img
           src="/hero.gif"
           alt="CUCCI background"
@@ -41,7 +40,6 @@ export default function Home() {
             zIndex: 0,
           }}
           />
-          </a>
 
         <div
           style={{
@@ -97,7 +95,7 @@ export default function Home() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === "Collections" ? "/collections" : item === "Cucci Care" ? "/cucci-care" : "#"}
+                  href={item === "Collections" ? "/collections" : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -136,7 +134,7 @@ export default function Home() {
                 Search
               </button>
               <a
-                href="/cucci-care"
+                href="#"
                 style={{
                   color: "#fff",
                     fontSize: "11px",
@@ -268,7 +266,7 @@ export default function Home() {
             {navItems.map((item) => (
               <a
                 key={item}
-                href={item === "Collections" ? "/collections" : item === "Cucci Care" ? "/cucci-care" : "#"}
+                href={item === "Collections" ? "/collections" : "#"}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   color: "#2a2420",
