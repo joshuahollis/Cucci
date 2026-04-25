@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
-import soapsImage from "@assets/CucciSet_1777141104252.jpg";
+import soapsImage from "@assets/CucciSet-removebg-preview_1777141222920.png";
 import intimatesImage from "@assets/intimates_1777140434556.jpg";
 
 export default function Home() {
@@ -240,8 +240,8 @@ export default function Home() {
             minHeight: isMobile ? "78vw" : "42vw",
             overflow: "hidden",
             textDecoration: "none",
-            color: "#fff",
-            background: "#1f1a17",
+            color: "#5a3b2e",
+            background: "#fff",
           }}
         >
           <img
@@ -249,8 +249,7 @@ export default function Home() {
             alt="Collections"
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center" }}
           />
-          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.14)" }} />
-          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
             Collections
           </div>
         </a>
@@ -261,8 +260,8 @@ export default function Home() {
             minHeight: isMobile ? "78vw" : "42vw",
             overflow: "hidden",
             textDecoration: "none",
-            color: "#fff",
-            background: "#ece7e1",
+            color: "#5a3b2e",
+            background: "#fff",
           }}
         >
           <img
@@ -270,8 +269,7 @@ export default function Home() {
             alt="Intimates"
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           />
-          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.12)" }} />
-          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
             Intimates
           </div>
         </a>
