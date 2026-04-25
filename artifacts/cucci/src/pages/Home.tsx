@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from "react";
 
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const gifRef = useRef<HTMLImageElement>(null);
 
@@ -13,7 +14,7 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (menuOpen) {
+    if (menuOpen || searchOpen) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "";
@@ -21,7 +22,7 @@ export default function Home() {
     return () => {
       document.body.style.overflow = "";
     };
-  }, [menuOpen]);
+  }, [menuOpen, searchOpen]);
 
   const navItems = ["Collections", "Intimates", "Cuccicare"];
 
@@ -115,10 +116,14 @@ export default function Home() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
-              {['Search', '(0)'].map((item) => (
+              {["Search", "(0)"].map((item) => (
                 <a
                   key={item}
                   href="#"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    if (item === "Search") setSearchOpen(true);
+                  }}
                   style={{
                     color: "#fff",
                     fontSize: "11px",
@@ -194,6 +199,10 @@ export default function Home() {
             </a>
             <a
               href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setSearchOpen(true);
+              }}
               style={{
                 color: "#fff",
                 fontSize: "11px",
@@ -203,11 +212,59 @@ export default function Home() {
                 opacity: 0.88,
               }}
             >
-              (0)
+              Search
             </a>
           </header>
         )}
       </section>
+
+      {searchOpen && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 120, background: "transparent", backdropFilter: "none" }}>
+          <div
+            onClick={() => setSearchOpen(false)}
+            style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.04)" }}
+          />
+          <div
+            style={{
+              position: "relative",
+              zIndex: 1,
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "flex-start",
+              justifyContent: "center",
+              paddingTop: isMobile ? "34vh" : "38vh",
+            }}
+          >
+            <form
+              action="/search"
+              method="get"
+              role="search"
+              style={{ width: isMobile ? "86%" : "520px" }}
+            >
+              <input
+                autoFocus
+                type="search"
+                name="q"
+                placeholder="Search"
+                style={{
+                  width: "100%",
+                  background: "transparent",
+                  border: "none",
+                  borderBottom: "1px solid rgba(255,255,255,0.8)",
+                  outline: "none",
+                  color: "#fff",
+                  fontSize: isMobile ? "20px" : "28px",
+                  fontFamily: "'Georgia', serif",
+                  letterSpacing: "0.08em",
+                  padding: "12px 0",
+                  caretColor: "#fff",
+                }}
+              />
+            </form>
+          </div>
+        </div>
+      )}
 
       {isMobile && menuOpen && (
         <div
