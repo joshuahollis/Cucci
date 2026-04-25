@@ -37,7 +37,7 @@ export default function Collections() {
         {!isMobile && (
           <header
             style={{
-              position: "absolute",
+              position: "sticky",
               top: 0,
               left: 0,
               right: 0,
@@ -96,7 +96,7 @@ export default function Collections() {
         {isMobile && (
           <header
             style={{
-              position: "absolute",
+              position: "sticky",
               top: 0,
               left: 0,
               right: 0,
