@@ -26,8 +26,9 @@ export default function Collections() {
   const navItems = ["Collections", "Intimates", "Cuccicare"];
 
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
-      <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh", display: "flex", justifyContent: "center" }}>
+      <div style={{ width: "100%", maxWidth: "383px" }}>
+      <section style={{ position: "relative", width: "100%", height: "497px", overflow: "hidden" }}>
         <img
           ref={gifRef}
           src="/collections.gif"
@@ -180,8 +181,8 @@ export default function Collections() {
       </section>
 
       <section style={{ display: "flex", width: "100%", flexDirection: isMobile ? "column" : "row" }}>
-        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "34vw", background: "#e9e4dc" }} />
-        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "34vw", background: "#ddd7cf" }} />
+        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "180px", background: "#e9e4dc" }} />
+        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "180px", background: "#ddd7cf" }} />
       </section>
 
       {isMobile && menuOpen && (
@@ -270,6 +271,7 @@ export default function Collections() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
