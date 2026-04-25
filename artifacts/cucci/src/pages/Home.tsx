@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
-import soapsImage from "@assets/CucciSet-removebg-preview_1777141222920.png";
+import soapsImage from "@assets/IMG_1925-removebg-preview_1777151058658.png";
 import intimatesImage from "@assets/intimates_1777140434556.jpg";
 
 export default function Home() {
