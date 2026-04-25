@@ -1,6 +1,9 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
 
+import soapsImage from "@assets/IMG_1361_1777140411610.jpg";
+import intimatesImage from "@assets/intimates_1777140434556.jpg";
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
@@ -227,6 +230,51 @@ export default function Home() {
             </button>
           </header>
         )}
+      </section>
+
+      <section style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", width: "100%" }}>
+        <a
+          href="/collections"
+          style={{
+            position: "relative",
+            minHeight: isMobile ? "78vw" : "42vw",
+            overflow: "hidden",
+            textDecoration: "none",
+            color: "#fff",
+            background: "#1f1a17",
+          }}
+        >
+          <img
+            src={soapsImage}
+            alt="Collections"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.14)" }} />
+          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+            Collections
+          </div>
+        </a>
+        <a
+          href="/gallery"
+          style={{
+            position: "relative",
+            minHeight: isMobile ? "78vw" : "42vw",
+            overflow: "hidden",
+            textDecoration: "none",
+            color: "#fff",
+            background: "#ece7e1",
+          }}
+        >
+          <img
+            src={intimatesImage}
+            alt="Intimates"
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+          />
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.12)" }} />
+          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
+            Intimates
+          </div>
+        </a>
       </section>
 
       {isMobile && menuOpen && (
