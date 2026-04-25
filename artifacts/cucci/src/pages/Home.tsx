@@ -265,7 +265,7 @@ export default function Home() {
           }}
         >
           <img
-            src={intimatesImage}
+            src={"@assets/cuccisoap_1777142239157.jpg"}
             alt="Intimates"
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
           />
