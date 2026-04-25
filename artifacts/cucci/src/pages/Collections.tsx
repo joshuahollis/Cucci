@@ -68,15 +68,7 @@ export default function Collections() {
             >
               CUCCI
             </a>
-            <nav
-              style={{
-                flex: 1,
-                display: "flex",
-                justifyContent: "center",
-                gap: "56px",
-                marginLeft: "24px",
-              }}
-            >
+            <nav style={{ flex: 1, display: "flex", justifyContent: "center", gap: "56px", marginLeft: "24px" }}>
               {navItems.map((item) => (
                 <a
                   key={item}
@@ -88,7 +80,6 @@ export default function Collections() {
                     textDecoration: "none",
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
-                    transition: "opacity 0.2s",
                     opacity: item === "Collections" ? 0.55 : 0.92,
                   }}
                 >
@@ -110,7 +101,6 @@ export default function Collections() {
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
                     opacity: 0.85,
-                    transition: "opacity 0.2s",
                   }}
                 >
                   {item}
@@ -200,7 +190,7 @@ export default function Collections() {
             position: "fixed",
             inset: 0,
             zIndex: 100,
-            background: "#f5f2ee",
+            background: "#f7dfe6",
             display: "flex",
             flexDirection: "column",
             padding: "28px 28px 40px",

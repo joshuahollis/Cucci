@@ -78,7 +78,6 @@ export default function Gallery() {
                     textDecoration: "none",
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
-                    transition: "opacity 0.2s",
                     opacity: item === "Intimates" ? 0.55 : 0.92,
                   }}
                 >
@@ -100,7 +99,6 @@ export default function Gallery() {
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
                     opacity: 0.85,
-                    transition: "opacity 0.2s",
                   }}
                 >
                   {item}
@@ -190,7 +188,7 @@ export default function Gallery() {
             position: "fixed",
             inset: 0,
             zIndex: 100,
-            background: "#f5f2ee",
+            background: "#f7dfe6",
             display: "flex",
             flexDirection: "column",
             padding: "28px 28px 40px",

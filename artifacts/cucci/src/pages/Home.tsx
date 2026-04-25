@@ -215,7 +215,7 @@ export default function Home() {
             position: "fixed",
             inset: 0,
             zIndex: 100,
-            background: "#f5f2ee",
+            background: "#f7dfe6",
             display: "flex",
             flexDirection: "column",
             padding: "28px 28px 40px",
