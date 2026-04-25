@@ -1,0 +1,48 @@
+Replit Agent Prompt
+Role: Expert Frontend Engineer
+
+Task: Build a high-end, minimalist e-commerce navigation and search interface inspired by the provided reference.
+
+Core UI/UX Requirements
+Aesthetic: Ultra-minimalist, high-fashion editorial style. Use a clean sans-serif font (like Helvetica or a modern grotesque).
+
+Background: The entire background should be a full-screen, looped video or high-quality image background with a subtle "hazy" or "dreamy" filter.
+
+Header: * Left side: Navigation links ("Woman", "Man", "Projects and Collaborations", "Collections").
+
+Right side: "SEARCH", "LOG IN", and "CART (0)".
+
+Text should be uppercase, small font size (approx 12px), and have generous letter spacing.
+
+Search Modal Functionality (Crucial)
+Replicate the specific "Slide-over" search behavior seen in the video:
+
+Trigger: When clicking "SEARCH", a white full-screen modal should slide in from the right (or overlay the screen).
+
+The "Line" Search: Instead of a standard box, the search input should be a single, thin horizontal line spanning the top width.
+
+The Search Handle: A small, draggable-looking circular handle should sit on the line. As the user types, this handle/indicator should feel interactive.
+
+Content Layout: * Top right of the modal has a "CREATE ACCOUNT" link and a "Close (X)" button.
+
+Below the search line, display large, clean navigation categories: "Woman >", "Man >", "Projects and Collaborations", and "Collections".
+
+Include a "See all results" link that appears when text is entered.
+
+Technical Specs
+Framework: React with Tailwind CSS for styling.
+
+Animations: Use Framer Motion for the modal transitions. The modal should slide in with a "spring" or high-damping effect to feel premium.
+
+Responsiveness: The header links should hide into a hamburger menu or stack gracefully on mobile, while the search modal remains the primary focus.
+
+DevTools Detail: Ensure the CSS matches the inspected values in the video:
+
+.search-modal should have background-color: white.
+
+Use flexbox for the header with justify-content: space-between.
+
+Input caret color and focus states should be invisible or extremely minimal.
+
+Deliverable
+A single-page application that mimics the landing page shown, featuring the functional full-screen search overlay and the specific typography/spacing of the "Paloma Wool" site.
