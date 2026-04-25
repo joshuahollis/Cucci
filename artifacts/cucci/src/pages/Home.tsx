@@ -20,7 +20,7 @@ export default function Home() {
     };
   }, [menuOpen, isSearchOpen]);
 
-  const navItems = useMemo(() => [], []);
+  const navItems = useMemo(() => ["Collections", "Intimates", "Cucci Care"], []);
 
   const closeSearch = () => setIsSearchOpen(false);
 
@@ -283,19 +283,7 @@ export default function Home() {
           </nav>
           <div style={{ display: "flex", gap: "24px", justifyContent: "center" }}>
             {["Instagram", "Vimeo", "TikTok"].map((s) => (
-              <a
-                key={s}
-                href="#"
-                style={{
-                  color: "#2a2420",
-                  fontSize: "10px",
-                  letterSpacing: "0.2em",
-                  textTransform: "uppercase",
-                  textDecoration: "none",
-                  fontFamily: "'Georgia', serif",
-                  opacity: 0.55,
-                }}
-              >
+              <a key={s} href="#" style={{ color: "#2a2420", fontSize: "10px", letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", fontFamily: "'Georgia', serif", opacity: 0.55 }}>
                 {s}
               </a>
             ))}
@@ -319,18 +307,7 @@ export default function Home() {
               WebkitBackdropFilter: "blur(8px)",
             }}
           >
-            <div
-              onClick={(e) => e.stopPropagation()}
-              style={{
-                width: "100%",
-                height: "100%",
-                padding: isMobile ? "22px 18px" : "28px 32px",
-                color: "#111",
-                display: "flex",
-                flexDirection: "column",
-                gap: "28px",
-              }}
-            >
+            <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", height: "100%", padding: isMobile ? "22px 18px" : "28px 32px", color: "#111", display: "flex", flexDirection: "column", gap: "28px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
                 <a href="/" style={{ color: "#111", textDecoration: "none" }}>CUCCI</a>
                 <button onClick={closeSearch} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#111", font: "inherit" }}>Close</button>

@@ -20,7 +20,7 @@ export default function Collections() {
     };
   }, [menuOpen, isSearchOpen]);
 
-  const navItems = useMemo(() => [], []);
+  const navItems = useMemo(() => ["Collections", "Intimates", "Cucci Care"], []);
 
   const closeSearch = () => setIsSearchOpen(false);
 
@@ -173,34 +173,9 @@ export default function Collections() {
       </section>
 
       {isMobile && menuOpen && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            background: "#f7dfe6",
-            display: "flex",
-            flexDirection: "column",
-            padding: "28px 28px 40px",
-          }}
-        >
+        <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#f7dfe6", display: "flex", flexDirection: "column", padding: "28px 28px 40px" }}>
           <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-start", marginBottom: "36px" }}>
-            <button
-              onClick={() => setMenuOpen(false)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "20px",
-                color: "#2a2420",
-                fontFamily: "'Georgia', serif",
-                lineHeight: 1,
-                padding: 0,
-              }}
-              aria-label="Close menu"
-            >
-              ×
-            </button>
+            <button onClick={() => setMenuOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#2a2420", fontFamily: "'Georgia', serif", lineHeight: 1, padding: 0 }} aria-label="Close menu">×</button>
           </div>
           <div style={{ marginBottom: "40px", borderBottom: "1px solid rgba(42,36,32,0.2)", paddingBottom: "12px" }}>
             <span style={{ width: "100%", display: "block", fontSize: "14px", fontFamily: "'Georgia', serif", color: "#2a2420", letterSpacing: "0.08em" }}>Search</span>
@@ -233,9 +208,9 @@ export default function Collections() {
               position: "fixed",
               inset: 0,
               zIndex: 90,
-              background: "rgba(255,255,255,0.9)",
-              backdropFilter: "blur(14px)",
-              WebkitBackdropFilter: "blur(14px)",
+              background: "rgba(255,255,255,0.42)",
+              backdropFilter: "blur(8px)",
+              WebkitBackdropFilter: "blur(8px)",
             }}
           >
             <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", height: "100%", padding: isMobile ? "22px 18px" : "28px 32px", color: "#111", display: "flex", flexDirection: "column", gap: "28px" }}>
