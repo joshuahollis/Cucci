@@ -27,7 +27,8 @@ export default function Home() {
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-        <img
+            <a href="/cucci-care" style={{ display: "block", width: "100%", height: "100%" }}>
+          <img
           src="/hero.gif"
           alt="CUCCI background"
           style={{
@@ -39,7 +40,8 @@ export default function Home() {
             objectFit: "cover",
             zIndex: 0,
           }}
-        />
+          />
+          </a>
 
         <div
           style={{
@@ -95,7 +97,7 @@ export default function Home() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === "Collections" ? "/collections" : "#"}
+                  href={item === "Collections" ? "/collections" : item === "Cucci Care" ? "/cucci-care" : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -134,7 +136,7 @@ export default function Home() {
                 Search
               </button>
               <a
-                href="#"
+                href="/cucci-care"
                 style={{
                   color: "#fff",
                     fontSize: "11px",
@@ -266,7 +268,7 @@ export default function Home() {
             {navItems.map((item) => (
               <a
                 key={item}
-                href={item === "Collections" ? "/collections" : "#"}
+                href={item === "Collections" ? "/collections" : item === "Cucci Care" ? "/cucci-care" : "#"}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   color: "#2a2420",
