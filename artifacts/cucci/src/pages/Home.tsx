@@ -50,7 +50,7 @@ export default function Home() {
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
           <video
-            src="/hero.mov"
+            src="/sweets.mov"
             autoPlay
             loop
             muted
