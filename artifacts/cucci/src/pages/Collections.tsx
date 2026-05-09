@@ -4,10 +4,14 @@ import { useEffect, useMemo, useState } from "react";
 export default function Collections() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -169,9 +173,31 @@ export default function Collections() {
         )}
       </section>
 
-      <section style={{ display: "flex", width: "100%", flexDirection: isMobile ? "column" : "row" }}>
-        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "34vw", background: "#e9e4dc" }} />
-        <div style={{ flex: 1, minHeight: isMobile ? "50vw" : "34vw", background: "#ddd7cf" }} />
+      <section style={{ backgroundColor: "#ffffff", padding: "60px 20px" }}>
+        <div
+          style={{
+            maxWidth: "1400px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+            gap: "50px",
+          }}
+        >
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: "#ffffff",
+                aspectRatio: "3 / 4",
+                position: "relative",
+                borderRadius: "2px",
+                boxShadow: "inset 0px 0px 15px rgba(0,0,0,0.05)",
+              }}
+            >
+              {/* No text, no labels, no UI inside */}
+            </div>
+          ))}
+        </div>
       </section>
 
       {isMobile && menuOpen && (

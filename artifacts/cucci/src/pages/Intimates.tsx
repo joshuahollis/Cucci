@@ -1,17 +1,17 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useEffect, useMemo, useState, useRef } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import soapsImage from "@assets/IMG_1842_1777152278485.jpeg";
-import intimatesImage from "@assets/intimates_1777140434556.jpg";
-
-export default function Home() {
+export default function Intimates() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isTablet, setIsTablet] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const searchRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const check = () => setIsMobile(window.innerWidth < 768);
+    const check = () => {
+      setIsMobile(window.innerWidth < 768);
+      setIsTablet(window.innerWidth >= 768 && window.innerWidth < 1024);
+    };
     check();
     window.addEventListener("resize", check);
     return () => window.removeEventListener("resize", check);
@@ -24,68 +24,32 @@ export default function Home() {
     };
   }, [menuOpen, isSearchOpen]);
 
-  const navItems = useMemo(() => ["Collections", "Intimates", "Cuccicare"], []);
+  const navItems = useMemo(() => ["Collections", "Intimates", "Cucci Care"], []);
 
   const closeSearch = () => setIsSearchOpen(false);
-
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
-        closeSearch();
-      }
-    }
-
-    if (isSearchOpen) {
-      document.addEventListener("mousedown", handleClickOutside);
-    } else {
-      document.removeEventListener("mousedown", handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [isSearchOpen, closeSearch]);
 
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-          <video
-            src="/hero.mov"
-            autoPlay
-            loop
-            muted
-            playsInline
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              zIndex: 0,
-            }}
-          />
-
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: "rgba(10,8,6,0.18)",
-            zIndex: 1,
-          }}
+        <img
+          src="/collections.gif"
+          alt="Collections background"
+          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
         />
+        <div style={{ position: "absolute", inset: 0, background: "rgba(10,8,6,0.18)", zIndex: 1 }} />
 
         {!isMobile && (
           <header
             style={{
-              position: "sticky",
+              position: "fixed",
               top: 0,
               left: 0,
               right: 0,
-              zIndex: 10,
+              zIndex: 50,
               display: "flex",
               alignItems: "flex-start",
               padding: "36px 64px 36px 48px",
+              pointerEvents: "auto",
             }}
           >
             <a
@@ -108,19 +72,11 @@ export default function Home() {
             >
               CUCCI
             </a>
-            <nav
-              style={{
-                flex: 1,
-                display: "flex",
-                justifyContent: "center",
-                gap: "56px",
-                marginLeft: "24px",
-              }}
-            >
+            <nav style={{ flex: 1, display: "flex", justifyContent: "center", gap: "56px", marginLeft: "24px" }}>
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === "Collections" ? "/collections" : item === "Cuccicare" ? "/cuccicare" : "#"}
+                  href={item === "Collections" ? "/collections" : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -128,54 +84,16 @@ export default function Home() {
                     textDecoration: "none",
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
-                    transition: "opacity 0.2s",
-                    opacity: 0.92,
+                    opacity: item === "Collections" ? 0.55 : 0.92,
                   }}
-                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.55")}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.92")}
                 >
                   {item}
                 </a>
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
-              <button
-                onClick={() => setIsSearchOpen(true)}
-                style={{
-                  color: "#fff",
-                  background: "none",
-                  border: "none",
-                  padding: 0,
-                  cursor: "pointer",
-                  fontSize: "11px",
-                  letterSpacing: "0.18em",
-                  textDecoration: "none",
-                  textTransform: "uppercase",
-                  fontFamily: "'Georgia', serif",
-                  fontWeight: 400,
-                  opacity: 0.85,
-                }}
-              >
-                Search
-              </button>
-              <a
-                href="#"
-                style={{
-                  color: "#fff",
-                    fontSize: "11px",
-                    letterSpacing: "0.18em",
-                    textDecoration: "none",
-                    textTransform: "uppercase",
-                    fontFamily: "'Georgia', serif",
-                    fontWeight: 400,
-                    opacity: 0.85,
-                    transition: "opacity 0.2s",
-                  }}
-                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.45")}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.85")}
-                >
-                  (0)
-                </a>
+              <button onClick={() => setIsSearchOpen(true)} style={{ color: "#fff", background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: "11px", letterSpacing: "0.18em", textDecoration: "none", textTransform: "uppercase", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: 0.85 }}>Search</button>
+              <span style={{ color: "#fff", fontSize: "11px", letterSpacing: "0.18em", textDecoration: "none", textTransform: "uppercase", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: 0.85 }}>(0)</span>
             </div>
           </header>
         )}
@@ -183,15 +101,16 @@ export default function Home() {
         {isMobile && (
           <header
             style={{
-              position: "sticky",
+              position: "fixed",
               top: 0,
               left: 0,
               right: 0,
-              zIndex: 10,
+              zIndex: 50,
               display: "flex",
               alignItems: "center",
               justifyContent: "space-between",
               padding: "24px 24px",
+              pointerEvents: "auto",
             }}
           >
             <button
@@ -254,97 +173,44 @@ export default function Home() {
         )}
       </section>
 
-      <section style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", width: "100%" }}>
-        <a
-          href="/collections"
+      <section style={{ backgroundColor: "#ffffff", padding: "60px 20px" }}>
+        <div
           style={{
-            position: "relative",
-            minHeight: isMobile ? "78vw" : "42vw",
-            overflow: "hidden",
-            textDecoration: "none",
-            color: "#5a3b2e",
-            background: "#fff",
+            maxWidth: "1400px",
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
+            gap: "50px",
           }}
         >
-          <img
-            src={soapsImage}
-            alt="Collections"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", background: "#fff" }}
-          />
-          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
-            Collections
-          </div>
-        </a>
-        <a
-          href="/gallery"
-          style={{
-            position: "relative",
-            minHeight: isMobile ? "78vw" : "42vw",
-            overflow: "hidden",
-            textDecoration: "none",
-            color: "#5a3b2e",
-            background: "#fff",
-          }}
-        >
-          <img
-            src={intimatesImage}
-            alt="Intimates"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
-            Intimates
-          </div>
-        </a>
+          {Array.from({ length: 3 }).map((_, index) => (
+            <div
+              key={index}
+              style={{
+                backgroundColor: "#ffffff",
+                aspectRatio: "3 / 4",
+                position: "relative",
+                borderRadius: "2px",
+                boxShadow: "inset 0px 0px 15px rgba(0,0,0,0.05)",
+              }}
+            >
+              {/* No text, no labels, no UI inside */}
+            </div>
+          ))}
+        </div>
       </section>
 
       {isMobile && menuOpen && (
-        <div
-          style={{
-            position: "fixed",
-            inset: 0,
-            zIndex: 100,
-            background: "#f7dfe6",
-            display: "flex",
-            flexDirection: "column",
-            padding: "28px 28px 40px",
-          }}
-        >
+        <div style={{ position: "fixed", inset: 0, zIndex: 100, background: "#f7dfe6", display: "flex", flexDirection: "column", padding: "28px 28px 40px" }}>
           <div style={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-start", marginBottom: "36px" }}>
-            <button
-              onClick={() => setMenuOpen(false)}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontSize: "20px",
-                color: "#2a2420",
-                fontFamily: "'Georgia', serif",
-                lineHeight: 1,
-                padding: 0,
-              }}
-              aria-label="Close menu"
-            >
-              ×
-            </button>
+            <button onClick={() => setMenuOpen(false)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#2a2420", fontFamily: "'Georgia', serif", lineHeight: 1, padding: 0 }} aria-label="Close menu">×</button>
           </div>
           <div style={{ marginBottom: "40px", borderBottom: "1px solid rgba(42,36,32,0.2)", paddingBottom: "12px" }}>
             <span style={{ width: "100%", display: "block", fontSize: "14px", fontFamily: "'Georgia', serif", color: "#2a2420", letterSpacing: "0.08em" }}>Search</span>
           </div>
           <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "center" }}>
             {navItems.map((item) => (
-              <a
-                key={item}
-                href={item === "Collections" ? "/collections" : "#"}
-                onClick={() => setMenuOpen(false)}
-                style={{
-                  color: "#2a2420",
-                  fontSize: "22px",
-                  letterSpacing: "0.12em",
-                  textDecoration: "none",
-                  fontFamily: "'Georgia', serif",
-                  fontWeight: 400,
-                }}
-              >
+              <a key={item} href={item === "Collections" ? "/collections" : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>
                 {item}
               </a>
             ))}
@@ -361,11 +227,11 @@ export default function Home() {
       <AnimatePresence>
         {isSearchOpen && (
           <motion.div
-            ref={searchRef}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
+            onClick={closeSearch}
             style={{
               position: "fixed",
               inset: 0,

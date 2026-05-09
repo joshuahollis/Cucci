@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState, useRef } from "react";
 import soapsImage from "@assets/IMG_1842_1777152278485.jpeg";
 import intimatesImage from "@assets/intimates_1777140434556.jpg";
 
-export default function Home() {
+export default function CucciCare() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -129,10 +129,10 @@ export default function Home() {
                     fontFamily: "'Georgia', serif",
                     fontWeight: 400,
                     transition: "opacity 0.2s",
-                    opacity: 0.92,
+                    opacity: item === "Cuccicare" ? 1 : 0.7,
                   }}
                   onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.55")}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.92")}
+                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = item === "Cuccicare" ? "1" : "0.7")}
                 >
                   {item}
                 </a>
@@ -334,7 +334,7 @@ export default function Home() {
             {navItems.map((item) => (
               <a
                 key={item}
-                href={item === "Collections" ? "/collections" : "#"}
+                href={item === "Collections" ? "/collections" : item === "Cuccicare" ? "/cuccicare" : "#"}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   color: "#2a2420",
