@@ -120,7 +120,7 @@ export default function Home() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === "Collections" ? "/collections" : item === "Cuccicare" ? "/cuccicare" : "#"}
+                href={item === "Collections" ? "/collections" : item === "Intimates" ? "/intimates" : item === "Cuccicare" ? "/cuccicare" : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -334,7 +334,7 @@ export default function Home() {
             {navItems.map((item) => (
               <a
                 key={item}
-                href={item === "Collections" ? "/collections" : "#"}
+                href={item === "Collections" ? "/collections" : item === "Intimates" ? "/intimates" : item === "Cuccicare" ? "/cuccicare" : "#"}
                 onClick={() => setMenuOpen(false)}
                 style={{
                   color: "#2a2420",
