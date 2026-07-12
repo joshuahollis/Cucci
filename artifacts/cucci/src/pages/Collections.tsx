@@ -76,7 +76,7 @@ export default function Collections() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === "Collections" ? "/collections" : "#"}
+                  href={item === "Collections" ? "/collections" : item === "Intimates" ? "/intimates" : item === "Cucci Care" ? "/cuccicare" : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -210,7 +210,7 @@ export default function Collections() {
           </div>
           <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "center" }}>
             {navItems.map((item) => (
-              <a key={item} href={item === "Collections" ? "/collections" : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>
+              <a key={item} href={item === "Collections" ? "/collections" : item === "Intimates" ? "/intimates" : item === "Cucci Care" ? "/cuccicare" : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>
                 {item}
               </a>
             ))}

@@ -4,6 +4,7 @@ import Home from "@/pages/Home";
 import Collections from "@/pages/Collections";
 import Gallery from "@/pages/Gallery";
 import CucciCare from "@/pages/CucciCare"; // Import CucciCare
+import Intimates from "@/pages/Intimates"; // Import Intimates
 
 const queryClient = new QueryClient();
 
@@ -14,6 +15,7 @@ function Router() {
       <Route path="/collections" component={Collections} />
       <Route path="/gallery" component={Gallery} />
       <Route path="/cuccicare" component={CucciCare} /> {/* Add CucciCare route */}
+      <Route path="/intimates" component={Intimates} /> {/* Add Intimates route */}
     </Switch>
   );
 }
