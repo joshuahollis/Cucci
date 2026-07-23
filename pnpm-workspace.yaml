@@ -67,6 +67,13 @@ catalog:
 
 autoInstallPeers: false
 
+# pnpm 11+ uses allowBuilds (onlyBuiltDependencies is ignored/removed)
+allowBuilds:
+  '@swc/core': true
+  esbuild: true
+  msw: true
+  unrs-resolver: true
+
 onlyBuiltDependencies:
   - '@swc/core'
   - esbuild
