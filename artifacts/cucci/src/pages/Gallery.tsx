@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { withBase } from "@/lib/withBase";
 
 const navItems = ["Collections", "Intimates", "Cuccicare"];
 
@@ -27,15 +28,15 @@ export default function Gallery() {
   return (
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
-        <img src="/gallery/ilovecucci_1777077432225.PNG" alt="CUCCI gallery hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
+        <img src={withBase("/gallery/ilovecucci_1777077432225.PNG")} alt="CUCCI gallery hero" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }} />
         <div style={{ position: "absolute", inset: 0, background: "rgba(10,8,6,0.18)", zIndex: 1 }} />
 
         {!isMobile && (
           <header style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 10, display: "flex", alignItems: "flex-start", padding: "36px 64px 36px 48px" }}>
-            <a href="/" style={{ writingMode: "vertical-rl", textOrientation: "mixed", transform: "rotate(180deg)", color: "#fff", fontSize: "13px", letterSpacing: "0.3em", fontFamily: "'Georgia', serif", fontWeight: 400, textTransform: "uppercase", userSelect: "none", marginTop: 4, textDecoration: "none" }}>CUCCI</a>
+            <a href={withBase("/")} style={{ writingMode: "vertical-rl", textOrientation: "mixed", transform: "rotate(180deg)", color: "#fff", fontSize: "13px", letterSpacing: "0.3em", fontFamily: "'Georgia', serif", fontWeight: 400, textTransform: "uppercase", userSelect: "none", marginTop: 4, textDecoration: "none" }}>CUCCI</a>
             <nav style={{ flex: 1, display: "flex", justifyContent: "center", gap: "56px", marginLeft: "24px" }}>
               {navItems.map((item) => (
-                <a key={item} href={item === "Collections" ? "/collections" : item === "Intimates" ? "/gallery" : "#"} style={{ color: "#fff", fontSize: "13px", letterSpacing: "0.1em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: item === "Intimates" ? 0.55 : 0.92 }}>{item}</a>
+                <a key={item} href={item === "Collections" ? withBase("/collections") : item === "Intimates" ? withBase("/gallery") : "#"} style={{ color: "#fff", fontSize: "13px", letterSpacing: "0.1em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: item === "Intimates" ? 0.55 : 0.92 }}>{item}</a>
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
@@ -51,7 +52,7 @@ export default function Gallery() {
             <button onClick={() => setMenuOpen(true)} style={{ background: "none", border: "none", cursor: "pointer", padding: 0, display: "flex", flexDirection: "column", gap: "5px" }} aria-label="Open menu">
               {[0, 1, 2].map((i) => <span key={i} style={{ display: "block", width: "22px", height: "1px", background: "#fff" }} />)}
             </button>
-            <a href="/" style={{ color: "#fff", fontSize: "14px", letterSpacing: "0.4em", fontFamily: "'Georgia', serif", textTransform: "uppercase", textDecoration: "none" }}>CUCCI</a>
+            <a href={withBase("/")} style={{ color: "#fff", fontSize: "14px", letterSpacing: "0.4em", fontFamily: "'Georgia', serif", textTransform: "uppercase", textDecoration: "none" }}>CUCCI</a>
             <span style={{ color: "#fff", fontSize: "11px", letterSpacing: "0.15em", textDecoration: "none", fontFamily: "'Georgia', serif", opacity: 0.88 }}>Search</span>
           </header>
         )}
@@ -72,7 +73,7 @@ export default function Gallery() {
           </div>
           <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "center" }}>
             {navItems.map((item) => (
-              <a key={item} href={item === "Collections" ? "/collections" : item === "Intimates" ? "/gallery" : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>{item}</a>
+              <a key={item} href={item === "Collections" ? withBase("/collections") : item === "Intimates" ? withBase("/gallery") : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>{item}</a>
             ))}
           </nav>
           <div style={{ display: "flex", gap: "24px", justifyContent: "center" }}>

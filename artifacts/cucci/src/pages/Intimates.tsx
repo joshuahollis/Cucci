@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import { withBase } from "@/lib/withBase";
 
 export default function Intimates() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -32,7 +33,7 @@ export default function Intimates() {
     <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
         <img
-          src="/collections.gif"
+          src={withBase("/collections.gif")}
           alt="Collections background"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
         />
@@ -53,7 +54,7 @@ export default function Intimates() {
             }}
           >
             <a
-              href="/"
+              href={withBase("/")}
               style={{
                 writingMode: "vertical-rl",
                 textOrientation: "mixed",
@@ -76,7 +77,7 @@ export default function Intimates() {
               {navItems.map((item) => (
                 <a
                   key={item}
-                  href={item === "Collections" ? "/collections" : item === "Intimates" ? "/intimates" : item === "Cucci Care" ? "/cuccicare" : "#"}
+                  href={item === "Collections" ? withBase("/collections") : item === "Intimates" ? withBase("/intimates") : item === "Cucci Care" ? withBase("/cuccicare") : "#"}
                   style={{
                     color: "#fff",
                     fontSize: "13px",
@@ -139,7 +140,7 @@ export default function Intimates() {
               ))}
             </button>
             <a
-              href="/"
+              href={withBase("/")}
               style={{
                 color: isSearchOpen ? "#111" : "#fff",
                 transition: "color 0.2s ease",
@@ -210,7 +211,7 @@ export default function Intimates() {
           </div>
           <nav style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", gap: "28px", alignItems: "center" }}>
             {navItems.map((item) => (
-              <a key={item} href={item === "Collections" ? "/collections" : item === "Intimates" ? "/intimates" : item === "Cucci Care" ? "/cuccicare" : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>
+              <a key={item} href={item === "Collections" ? withBase("/collections") : item === "Intimates" ? withBase("/intimates") : item === "Cucci Care" ? withBase("/cuccicare") : "#"} onClick={() => setMenuOpen(false)} style={{ color: "#2a2420", fontSize: "22px", letterSpacing: "0.12em", textDecoration: "none", fontFamily: "'Georgia', serif", fontWeight: 400 }}>
                 {item}
               </a>
             ))}
@@ -243,7 +244,7 @@ export default function Intimates() {
           >
             <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", height: "100%", padding: isMobile ? "22px 18px" : "28px 32px", color: "#111", display: "flex", flexDirection: "column", gap: "28px" }}>
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase" }}>
-                <a href="/" style={{ color: "#111", textDecoration: "none" }}>CUCCI</a>
+                <a href={withBase("/")} style={{ color: "#111", textDecoration: "none" }}>CUCCI</a>
                 <button onClick={closeSearch} style={{ background: "none", border: "none", padding: 0, cursor: "pointer", color: "#111", font: "inherit" }}>Close</button>
               </div>
               <div style={{ position: "relative", width: "100%" }}>
