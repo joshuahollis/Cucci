@@ -44,7 +44,8 @@ jobs:
       - name: Build site
         env:
           PORT: 5173
-          BASE_PATH: /Cucci/
+          # Custom domain (ilovecucci.com) serves from site root
+          BASE_PATH: /
         run: pnpm --filter @workspace/cucci run build
 
       - name: Add SPA 404 fallback
