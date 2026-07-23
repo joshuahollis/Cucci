@@ -33,6 +33,9 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
+        env:
+          # Satisfy workspace preinstall check (expects npm_config_user_agent to start with pnpm/)
+          npm_config_user_agent: pnpm/11.0.8
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck app
