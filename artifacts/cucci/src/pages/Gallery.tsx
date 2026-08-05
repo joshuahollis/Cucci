@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CartButton from "@/components/CartButton";
 import { withBase } from "@/lib/withBase";
 
 const navItems = ["Collections", "Intimates", "Cuccicare"];
@@ -40,9 +41,8 @@ export default function Gallery() {
               ))}
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
-              {['Search', '(0)'].map((item) => (
-                <span key={item} style={{ color: "#fff", fontSize: "11px", letterSpacing: "0.18em", textDecoration: "none", textTransform: "uppercase", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: 0.85 }}>{item}</span>
-              ))}
+              <span style={{ color: "#fff", fontSize: "11px", letterSpacing: "0.18em", textTransform: "uppercase", fontFamily: "'Georgia', serif", opacity: 0.85 }}>Search</span>
+              <CartButton color="#fff" />
             </div>
           </header>
         )}

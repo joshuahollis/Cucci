@@ -1,6 +1,8 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
-import { Link, useParams } from "wouter";
+import { Link, useLocation, useParams } from "wouter";
+import CartButton from "@/components/CartButton";
+import { useCart } from "@/context/CartContext";
 import {
   formatPrice,
   getProductByHandle,
@@ -9,6 +11,10 @@ import {
 import { withBase } from "@/lib/withBase";
 import NotFound from "@/pages/not-found";
 import sizeChartImage from "@assets/sizechart.png";
+
+function productImageSrc(src: string) {
+  return src.startsWith("http") ? src : withBase(src);
+}
 
 function Accordion({
   title,
@@ -70,15 +76,17 @@ function findVariant(product: ShopProduct, selected: string[]) {
 export default function ProductPage() {
   const params = useParams<{ handle: string }>();
   const product = getProductByHandle(params.handle ?? "");
+  const { addItem } = useCart();
+  const [, setLocation] = useLocation();
 
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [imageIndex, setImageIndex] = useState(0);
   const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+  const [quantity, setQuantity] = useState(1);
   const [sizeError, setSizeError] = useState(false);
   const [openFit, setOpenFit] = useState(false);
-  const [cartMessage, setCartMessage] = useState("");
 
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 900);
@@ -99,7 +107,7 @@ export default function ProductPage() {
     setImageIndex(0);
     setSizeError(false);
     setOpenFit(false);
-    setCartMessage("");
+    setQuantity(1);
     // Preselect first option of each axis when it's a single value; leave sizes unselected
     setSelectedOptions(
       product.optionValues.map((vals, i) => {
@@ -136,16 +144,49 @@ export default function ProductPage() {
   const sizeSelected = needsSize ? Boolean(selectedOptions[sizeIndex]) : true;
   const showSizeChart = product.title.toLowerCase().includes("sweetsuit");
 
-  const handleAddToCart = () => {
+  const resolveVariant = () => {
     if (needsSize && !sizeSelected) {
       setSizeError(true);
-      return;
+      return null;
     }
     const opts = selectedOptions.map((s, i) => s || product.optionValues[i][0]);
     const variant = findVariant(product, opts);
-    if (!variant || !variant.available) return;
-    setCartMessage("Added to cart");
-    window.setTimeout(() => setCartMessage(""), 2000);
+    if (!variant || !variant.available) return null;
+    return { variant, opts };
+  };
+
+  const buildCartPayload = () => {
+    const resolved = resolveVariant();
+    if (!resolved) return null;
+    const colorIndex = product.optionNames.findIndex((n) => n.toLowerCase().includes("color"));
+    const size =
+      sizeIndex >= 0 ? resolved.opts[sizeIndex] : undefined;
+    return {
+      productHandle: product.handle,
+      variantId: resolved.variant.id,
+      title: product.title,
+      colorLabel:
+        colorIndex >= 0
+          ? resolved.opts[colorIndex] || product.colorLabel
+          : product.colorLabel,
+      size,
+      price: resolved.variant.price,
+      image: product.images[0],
+      quantity,
+    };
+  };
+
+  const handleAddToCart = () => {
+    const payload = buildCartPayload();
+    if (!payload) return;
+    addItem(payload);
+  };
+
+  const handleBuyNow = () => {
+    const payload = buildCartPayload();
+    if (!payload) return;
+    addItem(payload, { openCart: false });
+    setLocation("/checkout");
   };
 
   const setOption = (optionIndex: number, value: string) => {
@@ -234,7 +275,7 @@ export default function ProductPage() {
             >
               Search
             </button>
-            <span style={{ fontSize: "11px", letterSpacing: "0.18em", opacity: 0.85 }}>(0)</span>
+            <CartButton />
           </div>
         </header>
       )}
@@ -281,21 +322,24 @@ export default function ProductPage() {
           >
             CUCCI
           </a>
-          <button
-            onClick={() => setIsSearchOpen(true)}
-            style={{
-              color: "#111",
-              background: "none",
-              border: "none",
-              padding: 0,
-              cursor: "pointer",
-              fontSize: 11,
-              letterSpacing: "0.15em",
-              fontFamily: "inherit",
-            }}
-          >
-            Search
-          </button>
+          <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+            <button
+              onClick={() => setIsSearchOpen(true)}
+              style={{
+                color: "#111",
+                background: "none",
+                border: "none",
+                padding: 0,
+                cursor: "pointer",
+                fontSize: 11,
+                letterSpacing: "0.15em",
+                fontFamily: "inherit",
+              }}
+            >
+              Search
+            </button>
+            <CartButton />
+          </div>
         </header>
       )}
 
@@ -322,7 +366,7 @@ export default function ProductPage() {
             }}
           >
             <img
-              src={product.images[imageIndex] ?? product.images[0]}
+              src={productImageSrc(product.images[imageIndex] ?? product.images[0])}
               alt={product.title}
               style={{
                 width: "100%",
@@ -390,7 +434,7 @@ export default function ProductPage() {
                   }}
                 >
                   <img
-                    src={src}
+                    src={productImageSrc(src)}
                     alt=""
                     style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
                   />
@@ -615,6 +659,54 @@ export default function ProductPage() {
             </div>
           )}
 
+          <div style={{ marginBottom: 16 }}>
+            <div style={{ fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase", marginBottom: 10, color: "#666" }}>
+              Quantity
+            </div>
+            <div
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                border: "1px solid #ccc",
+                height: 42,
+              }}
+            >
+              <button
+                type="button"
+                aria-label="Decrease quantity"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                style={{
+                  width: 40,
+                  height: "100%",
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  fontSize: 16,
+                  fontFamily: "inherit",
+                }}
+              >
+                −
+              </button>
+              <span style={{ minWidth: 32, textAlign: "center", fontSize: 14 }}>{quantity}</span>
+              <button
+                type="button"
+                aria-label="Increase quantity"
+                onClick={() => setQuantity((q) => q + 1)}
+                style={{
+                  width: 40,
+                  height: "100%",
+                  border: "none",
+                  background: "none",
+                  cursor: "pointer",
+                  fontSize: 16,
+                  fontFamily: "inherit",
+                }}
+              >
+                +
+              </button>
+            </div>
+          </div>
+
           <button
             type="button"
             onClick={handleAddToCart}
@@ -625,8 +717,8 @@ export default function ProductPage() {
               marginTop: 8,
               marginBottom: 8,
               border: "1px solid #111",
-              background: selectedVariant && !selectedVariant.available ? "#999" : "#111",
-              color: "#fff",
+              background: "#fff",
+              color: "#111",
               cursor: selectedVariant && !selectedVariant.available ? "not-allowed" : "pointer",
               fontFamily: "inherit",
               fontSize: 12,
@@ -636,12 +728,26 @@ export default function ProductPage() {
           >
             {selectedVariant && !selectedVariant.available ? "Sold out" : "Add to cart"}
           </button>
-          {cartMessage && (
-            <p style={{ margin: "0 0 20px", fontSize: 12, letterSpacing: "0.08em", color: "#666", textAlign: "center" }}>
-              {cartMessage}
-            </p>
-          )}
-          {!cartMessage && <div style={{ height: 20, marginBottom: 8 }} />}
+          <button
+            type="button"
+            onClick={handleBuyNow}
+            disabled={Boolean(selectedVariant && !selectedVariant.available)}
+            style={{
+              width: "100%",
+              height: 48,
+              marginBottom: 20,
+              border: "1px solid #e6c84a",
+              background: "#f5d76e",
+              color: "#111",
+              cursor: selectedVariant && !selectedVariant.available ? "not-allowed" : "pointer",
+              fontFamily: "inherit",
+              fontSize: 12,
+              letterSpacing: "0.16em",
+              textTransform: "uppercase",
+            }}
+          >
+            Buy it now
+          </button>
 
           <p style={{ margin: "0 0 24px", fontSize: 14, lineHeight: 1.65, color: "#333" }}>
             <strong style={{ fontWeight: 600 }}>{product.tagline}</strong>

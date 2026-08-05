@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import CartButton from "@/components/CartButton";
 import { withBase } from "@/lib/withBase";
 
 export default function Intimates() {
@@ -94,7 +95,7 @@ export default function Intimates() {
             </nav>
             <div style={{ display: "flex", gap: "28px", alignItems: "center" }}>
               <button onClick={() => setIsSearchOpen(true)} style={{ color: "#fff", background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: "11px", letterSpacing: "0.18em", textDecoration: "none", textTransform: "uppercase", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: 0.85 }}>Search</button>
-              <span style={{ color: "#fff", fontSize: "11px", letterSpacing: "0.18em", textDecoration: "none", textTransform: "uppercase", fontFamily: "'Georgia', serif", fontWeight: 400, opacity: 0.85 }}>(0)</span>
+              <CartButton color="#fff" />
             </div>
           </header>
         )}
@@ -153,23 +154,26 @@ export default function Intimates() {
             >
               CUCCI
             </a>
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              style={{
-                color: "#fff",
-                background: "none",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
-                fontSize: "11px",
-                letterSpacing: "0.15em",
-                textDecoration: "none",
-                fontFamily: "'Georgia', serif",
-                opacity: 0.88,
-              }}
-            >
-              Search
-            </button>
+            <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                style={{
+                  color: "#fff",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  letterSpacing: "0.15em",
+                  textDecoration: "none",
+                  fontFamily: "'Georgia', serif",
+                  opacity: 0.88,
+                }}
+              >
+                Search
+              </button>
+              <CartButton color="#fff" />
+            </div>
           </header>
         )}
       </section>

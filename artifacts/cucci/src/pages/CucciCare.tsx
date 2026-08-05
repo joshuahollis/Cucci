@@ -1,5 +1,6 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, useRef } from "react";
+import CartButton from "@/components/CartButton";
 import { withBase } from "@/lib/withBase";
 
 export default function CucciCare() {
@@ -156,24 +157,7 @@ export default function CucciCare() {
               >
                 Search
               </button>
-              <a
-                href="#"
-                style={{
-                  color: "#fff",
-                    fontSize: "11px",
-                    letterSpacing: "0.18em",
-                    textDecoration: "none",
-                    textTransform: "uppercase",
-                    fontFamily: "'Georgia', serif",
-                    fontWeight: 400,
-                    opacity: 0.85,
-                    transition: "opacity 0.2s",
-                  }}
-                  onMouseEnter={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.45")}
-                  onMouseLeave={(e) => ((e.target as HTMLAnchorElement).style.opacity = "0.85")}
-                >
-                  (0)
-                </a>
+              <CartButton color="#fff" />
             </div>
           </header>
         )}
@@ -231,23 +215,26 @@ export default function CucciCare() {
             >
               CUCCI
             </a>
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              style={{
-                color: "#fff",
-                background: "none",
-                border: "none",
-                padding: 0,
-                cursor: "pointer",
-                fontSize: "11px",
-                letterSpacing: "0.15em",
-                textDecoration: "none",
-                fontFamily: "'Georgia', serif",
-                opacity: 0.88,
-              }}
-            >
-              Search
-            </button>
+            <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                style={{
+                  color: "#fff",
+                  background: "none",
+                  border: "none",
+                  padding: 0,
+                  cursor: "pointer",
+                  fontSize: "11px",
+                  letterSpacing: "0.15em",
+                  textDecoration: "none",
+                  fontFamily: "'Georgia', serif",
+                  opacity: 0.88,
+                }}
+              >
+                Search
+              </button>
+              <CartButton color="#fff" />
+            </div>
           </header>
         )}
       </section>

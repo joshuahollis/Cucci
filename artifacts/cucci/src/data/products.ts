@@ -45,6 +45,8 @@ export const collectionProducts: ShopProduct[] = [
     sizes: ["S", "M", "L"],
     images: [
       "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/C5EECF6D-7C48-4F54-B0B0-5D7458623D85.jpg?v=1779409358",
+      "/products/blueberry-hoodie/front.jpg",
+      "/products/blueberry-hoodie/look-back.jpg",
       "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/8AE20D5C-BE3E-4025-B5FD-161B315148E4.jpg?v=1779409358",
     ],
     ...sweetsuitCopy,
