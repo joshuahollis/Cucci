@@ -16,6 +16,8 @@ export type ShopProduct = {
   optionValues: string[][];
   sizes: string[];
   images: string[];
+  /** Optional gallery overrides keyed by Color option value (e.g. Black / White). */
+  imagesByColor?: Record<string, string[]>;
   tagline: string;
   description: string;
   content: string;
@@ -32,6 +34,21 @@ const sweetsuitCopy = {
   care: "Recommended hand wash cold and air dry. Can machine wash inside out and low temperature dry.",
 };
 
+const crystalBlackImages = [
+  "/products/crystal-crop/black-pink-1.jpg",
+  "/products/crystal-crop/black-pink-2.jpg",
+  "/products/crystal-crop/black-pink-1.jpg",
+];
+
+const crystalWhiteImages = ["/products/crystal-crop/white-pink.jpg"];
+
+/** Shared catalog set so the product always exposes 3 gallery frames. */
+const crystalCatalogImages = [
+  "/products/crystal-crop/black-pink-1.jpg",
+  "/products/crystal-crop/black-pink-2.jpg",
+  "/products/crystal-crop/white-pink.jpg",
+];
+
 export const collectionProducts: ShopProduct[] = [
   {
     handle: "sweetsuit-hoodie-2",
@@ -47,7 +64,6 @@ export const collectionProducts: ShopProduct[] = [
       "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/C5EECF6D-7C48-4F54-B0B0-5D7458623D85.jpg?v=1779409358",
       "/products/blueberry-hoodie/front.jpg",
       "/products/blueberry-hoodie/look-back.jpg",
-      "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/8AE20D5C-BE3E-4025-B5FD-161B315148E4.jpg?v=1779409358",
     ],
     ...sweetsuitCopy,
     modelInfo: "Model is wearing size medium.",
@@ -68,8 +84,9 @@ export const collectionProducts: ShopProduct[] = [
     optionValues: [["Blueberry Pie 🫐"], ["S", "M", "L", "XL"]],
     sizes: ["S", "M", "L", "XL"],
     images: [
-      "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/IMG_2484.jpg?v=1778342141",
-      "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/ED89FC23-9931-48E3-9D34-013985BC11B5.jpg?v=1779409359",
+      "/products/blueberry-pants/flat.jpg",
+      "/products/blueberry-pants/look.jpg",
+      "/products/blueberry-pants/back.jpg",
     ],
     ...sweetsuitCopy,
     modelInfo: "Model is wearing size large.",
@@ -176,35 +193,55 @@ export const collectionProducts: ShopProduct[] = [
     handle: "the-crystal-crop",
     title: "The Crystal Crop™",
     price: 30,
-    colorLabel: "Black / Blue",
+    colorLabel: "Black / Pink",
     colorHex: "#111111",
     optionNames: ["Color", "Crystal Color"],
     optionValues: [
       ["Black", "White"],
-      ["Blue", "Pink"],
+      ["Pink", "Blue"],
     ],
     sizes: [],
-    images: [
-      "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/C77DD258-7544-43AC-8B6D-0AA96A61EB84.jpg?v=1778292484",
-      "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/1C589AE2-544A-476D-ACEF-29F9A49F05D0.jpg?v=1778292484",
-      "https://cdn.shopify.com/s/files/1/0808/3613/3097/files/5EE7B6FF-5D65-4D28-AF60-14F32C4F9D2F.jpg?v=1778292484",
-    ],
+    images: crystalCatalogImages,
+    imagesByColor: {
+      Black: crystalBlackImages,
+      White: crystalWhiteImages,
+    },
     tagline: "A classic cotton crop.",
     description:
       "Soft, breathable fabric with a close fit. Cropped length. Short sleeves. Crystal cucci detailing.",
     content: "100% cotton, exclusive of ornamentation.",
     care: "Machine wash cold inside out, dry on lower temperature.",
     variants: [
-      { id: 50983524368617, options: ["Black", "Blue"], price: 30, available: true },
       { id: 50983524401385, options: ["Black", "Pink"], price: 30, available: true },
-      { id: 50983524434153, options: ["White", "Blue"], price: 30, available: true },
+      { id: 50983524368617, options: ["Black", "Blue"], price: 30, available: true },
       { id: 50983524466921, options: ["White", "Pink"], price: 30, available: true },
+      { id: 50983524434153, options: ["White", "Blue"], price: 30, available: true },
     ],
   },
 ];
 
 export function getProductByHandle(handle: string): ShopProduct | undefined {
   return collectionProducts.find((p) => p.handle === handle);
+}
+
+/** Resolve the swipeable gallery for the current color selection. */
+export function getGalleryImages(
+  product: ShopProduct,
+  selectedOptions: string[] = [],
+): string[] {
+  const colorIndex = product.optionNames.findIndex((n) => {
+    const lower = n.toLowerCase();
+    return lower === "color" || (lower.includes("color") && !lower.includes("crystal"));
+  });
+  const colorValue =
+    (colorIndex >= 0 ? selectedOptions[colorIndex] : undefined) ||
+    product.optionValues[colorIndex]?.[0] ||
+    "";
+
+  if (product.imagesByColor && colorValue && product.imagesByColor[colorValue]?.length) {
+    return product.imagesByColor[colorValue];
+  }
+  return product.images;
 }
 
 export function formatPrice(price: number): string {

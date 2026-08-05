@@ -2,19 +2,17 @@ import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, type ReactNode } from "react";
 import { Link, useLocation, useParams } from "wouter";
 import CartButton from "@/components/CartButton";
+import ProductGallery from "@/components/ProductGallery";
 import { useCart } from "@/context/CartContext";
 import {
   formatPrice,
+  getGalleryImages,
   getProductByHandle,
   type ShopProduct,
 } from "@/data/products";
 import { withBase } from "@/lib/withBase";
 import NotFound from "@/pages/not-found";
 import sizeChartImage from "@assets/sizechart.png";
-
-function productImageSrc(src: string) {
-  return src.startsWith("http") ? src : withBase(src);
-}
 
 function Accordion({
   title,
@@ -131,13 +129,14 @@ export default function ProductPage() {
       .filter((p): p is ShopProduct => Boolean(p))
       .filter((p, i, arr) => arr.findIndex((x) => x.handle === p.handle) === i) ?? [];
 
-  const selectedVariant = findVariant(
-    product,
-    selectedOptions.map((s, i) => {
-      if (s) return s;
-      return product.optionValues[i]?.[0] ?? "";
-    }),
-  );
+  const resolvedOptions = selectedOptions.map((s, i) => {
+    if (s) return s;
+    return product.optionValues[i]?.[0] ?? "";
+  });
+
+  const galleryImages = getGalleryImages(product, resolvedOptions);
+
+  const selectedVariant = findVariant(product, resolvedOptions);
 
   const sizeIndex = product.optionNames.findIndex((n) => n.toLowerCase().includes("size"));
   const needsSize = sizeIndex >= 0;
@@ -158,20 +157,23 @@ export default function ProductPage() {
   const buildCartPayload = () => {
     const resolved = resolveVariant();
     if (!resolved) return null;
-    const colorIndex = product.optionNames.findIndex((n) => n.toLowerCase().includes("color"));
+    const imagesForSelection = getGalleryImages(product, resolved.opts);
+    const colorParts = product.optionNames
+      .map((name, i) => {
+        if (!name.toLowerCase().includes("color")) return null;
+        return resolved.opts[i];
+      })
+      .filter(Boolean);
     const size =
       sizeIndex >= 0 ? resolved.opts[sizeIndex] : undefined;
     return {
       productHandle: product.handle,
       variantId: resolved.variant.id,
       title: product.title,
-      colorLabel:
-        colorIndex >= 0
-          ? resolved.opts[colorIndex] || product.colorLabel
-          : product.colorLabel,
+      colorLabel: colorParts.length > 0 ? colorParts.join(" / ") : product.colorLabel,
       size,
       price: resolved.variant.price,
-      image: product.images[0],
+      image: imagesForSelection[0] ?? product.images[0],
       quantity,
     };
   };
@@ -195,8 +197,12 @@ export default function ProductPage() {
       next[optionIndex] = value;
       return next;
     });
-    if (product.optionNames[optionIndex]?.toLowerCase().includes("size")) {
+    const optionName = product.optionNames[optionIndex]?.toLowerCase() ?? "";
+    if (optionName.includes("size")) {
       setSizeError(false);
+    }
+    if (optionName === "color" || (optionName.includes("color") && !optionName.includes("crystal"))) {
+      setImageIndex(0);
     }
   };
 
@@ -355,94 +361,13 @@ export default function ProductPage() {
         }}
       >
         {/* Gallery */}
-        <div>
-          <div
-            style={{
-              position: "relative",
-              width: "100%",
-              aspectRatio: isMobile ? "3 / 4" : "auto",
-              background: "#f5f5f5",
-              overflow: "hidden",
-            }}
-          >
-            <img
-              src={productImageSrc(product.images[imageIndex] ?? product.images[0])}
-              alt={product.title}
-              style={{
-                width: "100%",
-                height: isMobile ? "100%" : "auto",
-                maxHeight: isMobile ? "none" : "85vh",
-                objectFit: "cover",
-                objectPosition: "center top",
-                display: "block",
-              }}
-            />
-            {product.images.length > 1 && (
-              <div
-                style={{
-                  position: "absolute",
-                  bottom: 16,
-                  left: 0,
-                  right: 0,
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 8,
-                }}
-              >
-                {product.images.map((_, i) => (
-                  <button
-                    key={i}
-                    type="button"
-                    aria-label={`View image ${i + 1}`}
-                    onClick={() => setImageIndex(i)}
-                    style={{
-                      width: 7,
-                      height: 7,
-                      borderRadius: "50%",
-                      border: "none",
-                      padding: 0,
-                      cursor: "pointer",
-                      background: i === imageIndex ? "#111" : "rgba(255,255,255,0.85)",
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
-
-          {!isMobile && product.images.length > 1 && (
-            <div
-              style={{
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 8,
-                marginTop: 8,
-              }}
-            >
-              {product.images.slice(1).map((src, i) => (
-                <button
-                  key={src}
-                  type="button"
-                  onClick={() => setImageIndex(i + 1)}
-                  style={{
-                    border: "none",
-                    padding: 0,
-                    cursor: "pointer",
-                    background: "#f5f5f5",
-                    aspectRatio: "3 / 4",
-                    overflow: "hidden",
-                  }}
-                >
-                  <img
-                    src={productImageSrc(src)}
-                    alt=""
-                    style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center top", display: "block" }}
-                  />
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
+        <ProductGallery
+          images={galleryImages}
+          alt={product.title}
+          isMobile={isMobile}
+          imageIndex={Math.min(imageIndex, Math.max(galleryImages.length - 1, 0))}
+          onIndexChange={setImageIndex}
+        />
 
         {/* Product info */}
         <div
