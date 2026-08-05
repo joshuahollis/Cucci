@@ -1,0 +1,12 @@
+[build]
+  command = "pnpm install --frozen-lockfile && PORT=8080 BASE_PATH=/ pnpm --filter @workspace/cucci run build"
+  publish = "artifacts/cucci/dist/public"
+
+[build.environment]
+  NODE_VERSION = "22"
+  PNPM_VERSION = "11.0.8"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
