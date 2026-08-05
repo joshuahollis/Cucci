@@ -34,19 +34,25 @@ const sweetsuitCopy = {
   care: "Recommended hand wash cold and air dry. Can machine wash inside out and low temperature dry.",
 };
 
+/** Black selection leads with black; white shirt replaces the duplicate black frame. */
 const crystalBlackImages = [
   "/products/crystal-crop/black-pink-1.jpg",
+  "/products/crystal-crop/white-pink.jpg",
   "/products/crystal-crop/black-pink-2.jpg",
-  "/products/crystal-crop/black-pink-1.jpg",
 ];
 
-const crystalWhiteImages = ["/products/crystal-crop/white-pink.jpg"];
-
-/** Shared catalog set so the product always exposes 3 gallery frames. */
-const crystalCatalogImages = [
+/** White selection leads with white so cart/checkout thumbnails match. */
+const crystalWhiteImages = [
+  "/products/crystal-crop/white-pink.jpg",
   "/products/crystal-crop/black-pink-1.jpg",
   "/products/crystal-crop/black-pink-2.jpg",
+];
+
+/** Catalog thumbnail + hover: black then white (not two blacks). */
+const crystalCatalogImages = [
+  "/products/crystal-crop/black-pink-1.jpg",
   "/products/crystal-crop/white-pink.jpg",
+  "/products/crystal-crop/black-pink-2.jpg",
 ];
 
 /** Catalog order: orange (Peach), blue (Blueberry), pink (Strawberry), then crystal. */
