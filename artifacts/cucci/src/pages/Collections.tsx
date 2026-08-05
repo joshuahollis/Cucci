@@ -1,20 +1,15 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "wouter";
 import CartButton from "@/components/CartButton";
-import { collectionProducts, formatPrice, getProductByHandle } from "@/data/products";
+import CollectionProductCard from "@/components/CollectionProductCard";
+import { collectionProducts } from "@/data/products";
 import { withBase } from "@/lib/withBase";
-
-function productImageSrc(src: string) {
-  return src.startsWith("http") ? src : withBase(src);
-}
 
 export default function Collections() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [hoveredHandle, setHoveredHandle] = useState<string | null>(null);
 
   useEffect(() => {
     const check = () => {
@@ -230,89 +225,9 @@ export default function Collections() {
             gap: isMobile ? "28px 12px" : "48px 20px",
           }}
         >
-          {collectionProducts.map((product) => {
-            const related =
-              product.relatedHandles
-                ?.map((h) => getProductByHandle(h))
-                .filter(Boolean)
-                .filter((p, i, arr) => arr.findIndex((x) => x!.handle === p!.handle) === i) ?? [];
-            const colorCount = related.length > 1 ? related.length : 0;
-            const hoverImage =
-              hoveredHandle === product.handle && product.images[1]
-                ? product.images[1]
-                : product.images[0];
-
-            return (
-              <Link
-                key={product.handle}
-                href={`/products/${product.handle}`}
-                onMouseEnter={() => setHoveredHandle(product.handle)}
-                onMouseLeave={() => setHoveredHandle(null)}
-                style={{
-                  textDecoration: "none",
-                  color: "#1a1a1a",
-                  display: "block",
-                }}
-              >
-                <div
-                  style={{
-                    position: "relative",
-                    width: "100%",
-                    aspectRatio: "3 / 4",
-                    overflow: "hidden",
-                    background: "#f4f4f4",
-                    marginBottom: 14,
-                  }}
-                >
-                  <img
-                    src={productImageSrc(hoverImage)}
-                    alt={`${product.title} — ${product.colorLabel}`}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      objectPosition: "center top",
-                      display: "block",
-                      transition: "opacity 0.35s ease",
-                    }}
-                  />
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", textAlign: "center" }}>
-                  <span
-                    style={{
-                      fontSize: isMobile ? 12 : 13,
-                      letterSpacing: "0.02em",
-                      fontWeight: 400,
-                      lineHeight: 1.35,
-                    }}
-                  >
-                    {product.title}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: isMobile ? 12 : 13,
-                      color: "#444",
-                      letterSpacing: "0.02em",
-                    }}
-                  >
-                    {formatPrice(product.price)}
-                  </span>
-                  {colorCount > 0 && (
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: "#888",
-                        letterSpacing: "0.04em",
-                        marginTop: 2,
-                      }}
-                    >
-                      {colorCount} colors
-                    </span>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
+          {collectionProducts.map((product) => (
+            <CollectionProductCard key={product.handle} product={product} isMobile={isMobile} />
+          ))}
         </div>
       </section>
 

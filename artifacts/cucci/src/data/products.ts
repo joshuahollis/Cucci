@@ -113,10 +113,11 @@ export const collectionProducts: ShopProduct[] = [
     optionNames: ["Color", "Size"],
     optionValues: [["Blueberry Pie 🫐"], ["S", "M", "L"]],
     sizes: ["S", "M", "L"],
-    // Model first; flat product hoodie replaces the former side-profile shot
+    // Model first, flat product, hood-up lifestyle as third
     images: [
       "/products/blueberry-hoodie/front.jpg",
       "/products/blueberry-hoodie/flat.jpg",
+      "/products/blueberry-hoodie/hood-up.jpg",
     ],
     ...sweetsuitCopy,
     modelInfo: "Model is wearing size medium.",
@@ -136,10 +137,10 @@ export const collectionProducts: ShopProduct[] = [
     optionNames: ["Color", "Size"],
     optionValues: [["Blueberry Pie 🫐"], ["S", "M", "L", "XL"]],
     sizes: ["S", "M", "L", "XL"],
-    // Model photos first; flat product last
+    // Former second photo (back) is now the main; look + flat follow
     images: [
-      "/products/blueberry-pants/look.jpg",
       "/products/blueberry-pants/back.jpg",
+      "/products/blueberry-pants/look.jpg",
       "/products/blueberry-pants/flat.jpg",
     ],
     ...sweetsuitCopy,
