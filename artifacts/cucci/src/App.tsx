@@ -3,8 +3,10 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import Home from "@/pages/Home";
 import Collections from "@/pages/Collections";
 import Gallery from "@/pages/Gallery";
-import CucciCare from "@/pages/CucciCare"; // Import CucciCare
-import Intimates from "@/pages/Intimates"; // Import Intimates
+import CucciCare from "@/pages/CucciCare";
+import Intimates from "@/pages/Intimates";
+import Product from "@/pages/Product";
+import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
 
@@ -13,9 +15,11 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/collections" component={Collections} />
+      <Route path="/products/:handle" component={Product} />
       <Route path="/gallery" component={Gallery} />
-      <Route path="/cuccicare" component={CucciCare} /> {/* Add CucciCare route */}
-      <Route path="/intimates" component={Intimates} /> {/* Add Intimates route */}
+      <Route path="/cuccicare" component={CucciCare} />
+      <Route path="/intimates" component={Intimates} />
+      <Route component={NotFound} />
     </Switch>
   );
 }
@@ -23,7 +27,7 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "") }>
+      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
         <Router />
       </WouterRouter>
     </QueryClientProvider>
@@ -31,5 +35,3 @@ function App() {
 }
 
 export default App;
-
-//test//

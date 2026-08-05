@@ -1,5 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState } from "react";
+import { Link } from "wouter";
+import { collectionProducts, formatPrice, getProductByHandle } from "@/data/products";
 import { withBase } from "@/lib/withBase";
 
 export default function Collections() {
@@ -7,6 +9,7 @@ export default function Collections() {
   const [isMobile, setIsMobile] = useState(false);
   const [isTablet, setIsTablet] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [hoveredHandle, setHoveredHandle] = useState<string | null>(null);
 
   useEffect(() => {
     const check = () => {
@@ -29,8 +32,10 @@ export default function Collections() {
 
   const closeSearch = () => setIsSearchOpen(false);
 
+  const columns = isMobile ? 2 : isTablet ? 3 : 4;
+
   return (
-    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#f5f2ee", minHeight: "100vh" }}>
+    <div style={{ fontFamily: "'Georgia', 'Times New Roman', serif", background: "#fff", minHeight: "100vh" }}>
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
         <img
           src={withBase("/collections.gif")}
@@ -174,30 +179,132 @@ export default function Collections() {
         )}
       </section>
 
-      <section style={{ backgroundColor: "#ffffff", padding: "60px 20px" }}>
+      <section
+        style={{
+          backgroundColor: "#ffffff",
+          padding: isMobile ? "48px 16px 80px" : "64px 40px 100px",
+        }}
+      >
         <div
           style={{
-            maxWidth: "1400px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(3, 1fr)",
-            gap: "50px",
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "baseline",
+            marginBottom: isMobile ? 28 : 40,
+            maxWidth: 1600,
+            marginLeft: "auto",
+            marginRight: "auto",
           }}
         >
-          {Array.from({ length: 3 }).map((_, index) => (
-            <div
-              key={index}
-              style={{
-                backgroundColor: "#ffffff",
-                aspectRatio: "3 / 4",
-                position: "relative",
-                borderRadius: "2px",
-                boxShadow: "inset 0px 0px 15px rgba(0,0,0,0.05)",
-              }}
-            >
-              {/* No text, no labels, no UI inside */}
-            </div>
-          ))}
+          <h1
+            style={{
+              margin: 0,
+              fontSize: isMobile ? 14 : 15,
+              fontWeight: 400,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              color: "#1a1a1a",
+            }}
+          >
+            Collections
+          </h1>
+          <span style={{ fontSize: 12, letterSpacing: "0.06em", color: "#666" }}>
+            {collectionProducts.length} products
+          </span>
+        </div>
+
+        <div
+          style={{
+            maxWidth: 1600,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: `repeat(${columns}, minmax(0, 1fr))`,
+            gap: isMobile ? "28px 12px" : "48px 20px",
+          }}
+        >
+          {collectionProducts.map((product) => {
+            const related =
+              product.relatedHandles
+                ?.map((h) => getProductByHandle(h))
+                .filter(Boolean)
+                .filter((p, i, arr) => arr.findIndex((x) => x!.handle === p!.handle) === i) ?? [];
+            const colorCount = related.length > 1 ? related.length : 0;
+            const hoverImage =
+              hoveredHandle === product.handle && product.images[1]
+                ? product.images[1]
+                : product.images[0];
+
+            return (
+              <Link
+                key={product.handle}
+                href={`/products/${product.handle}`}
+                onMouseEnter={() => setHoveredHandle(product.handle)}
+                onMouseLeave={() => setHoveredHandle(null)}
+                style={{
+                  textDecoration: "none",
+                  color: "#1a1a1a",
+                  display: "block",
+                }}
+              >
+                <div
+                  style={{
+                    position: "relative",
+                    width: "100%",
+                    aspectRatio: "3 / 4",
+                    overflow: "hidden",
+                    background: "#f4f4f4",
+                    marginBottom: 14,
+                  }}
+                >
+                  <img
+                    src={hoverImage}
+                    alt={`${product.title} — ${product.colorLabel}`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                      objectPosition: "center top",
+                      display: "block",
+                      transition: "opacity 0.35s ease",
+                    }}
+                  />
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", textAlign: "center" }}>
+                  <span
+                    style={{
+                      fontSize: isMobile ? 12 : 13,
+                      letterSpacing: "0.02em",
+                      fontWeight: 400,
+                      lineHeight: 1.35,
+                    }}
+                  >
+                    {product.title}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: isMobile ? 12 : 13,
+                      color: "#444",
+                      letterSpacing: "0.02em",
+                    }}
+                  >
+                    {formatPrice(product.price)}
+                  </span>
+                  {colorCount > 0 && (
+                    <span
+                      style={{
+                        fontSize: 11,
+                        color: "#888",
+                        letterSpacing: "0.04em",
+                        marginTop: 2,
+                      }}
+                    >
+                      {colorCount} colors
+                    </span>
+                  )}
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 

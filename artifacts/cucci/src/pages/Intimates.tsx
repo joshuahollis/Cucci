@@ -34,7 +34,7 @@ export default function Intimates() {
       <section style={{ position: "relative", width: "100%", height: "100vh", overflow: "hidden" }}>
         <img
           src={withBase("/collections.gif")}
-          alt="Collections background"
+          alt="Intimates background"
           style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", zIndex: 0 }}
         />
         <div style={{ position: "absolute", inset: 0, background: "rgba(10,8,6,0.18)", zIndex: 1 }} />

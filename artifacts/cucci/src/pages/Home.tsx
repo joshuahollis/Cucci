@@ -1,7 +1,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, useRef } from "react";
 
-import soapsImage from "@assets/IMG_1842_1777152278485.jpeg";
+import collectionsImage from "@assets/Collections_2.jpeg";
 import intimatesImage from "@assets/intimates_1777140434556.jpg";
 import { withBase } from "@/lib/withBase";
 
@@ -268,9 +268,9 @@ export default function Home() {
           }}
         >
           <img
-            src={soapsImage}
+            src={collectionsImage}
             alt="Collections"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", background: "#fff" }}
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center center", background: "#fff" }}
           />
           <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
             Collections

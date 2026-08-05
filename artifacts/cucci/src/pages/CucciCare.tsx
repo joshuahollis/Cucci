@@ -1,8 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useMemo, useState, useRef } from "react";
-
-import soapsImage from "@assets/IMG_1842_1777152278485.jpeg";
-import intimatesImage from "@assets/intimates_1777140434556.jpg";
 import { withBase } from "@/lib/withBase";
 
 export default function CucciCare() {
@@ -255,47 +252,36 @@ export default function CucciCare() {
         )}
       </section>
 
-      <section style={{ display: "grid", gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr", width: "100%" }}>
-        <a
-          href={withBase("/collections")}
+      <section style={{ backgroundColor: "#ffffff", padding: isMobile ? "48px 16px 80px" : "64px 40px 100px" }}>
+        <div
           style={{
-            position: "relative",
-            minHeight: isMobile ? "78vw" : "42vw",
-            overflow: "hidden",
-            textDecoration: "none",
-            color: "#5a3b2e",
-            background: "#fff",
+            maxWidth: 1600,
+            margin: "0 auto",
+            display: "grid",
+            gridTemplateColumns: isMobile ? "1fr" : "1fr 1fr",
+            gap: isMobile ? "28px 12px" : "48px 20px",
           }}
         >
-          <img
-            src={soapsImage}
-            alt="Collections"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", objectPosition: "center", background: "#fff" }}
-          />
-          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
-            Collections
-          </div>
-        </a>
-        <a
-          href={withBase("/gallery")}
-          style={{
-            position: "relative",
-            minHeight: isMobile ? "78vw" : "42vw",
-            overflow: "hidden",
-            textDecoration: "none",
-            color: "#5a3b2e",
-            background: "#fff",
-          }}
-        >
-          <img
-            src={intimatesImage}
-            alt="Intimates"
-            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
-          />
-          <div style={{ position: "absolute", left: "50%", bottom: 22, transform: "translateX(-50%)", fontSize: "12px", letterSpacing: "0.18em", textTransform: "uppercase", color: "#5a3b2e" }}>
-            Intimates
-          </div>
-        </a>
+          {["Collections", "Intimates"].map((label) => (
+            <div key={label} style={{ display: "block" }}>
+              <div
+                style={{
+                  position: "relative",
+                  width: "100%",
+                  aspectRatio: "3 / 4",
+                  overflow: "hidden",
+                  background: "#f4f4f4",
+                  marginBottom: 14,
+                }}
+              />
+              <div style={{ display: "flex", flexDirection: "column", gap: 4, alignItems: "center", textAlign: "center" }}>
+                <span style={{ fontSize: isMobile ? 12 : 13, letterSpacing: "0.02em", fontWeight: 400, lineHeight: 1.35, color: "#1a1a1a" }}>
+                  {label}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       {isMobile && menuOpen && (
