@@ -19,6 +19,7 @@ function Router() {
     <Switch>
       <Route path="/" component={Home} />
       <Route path="/collections" component={Collections} />
+      <Route path="/products" component={Collections} />
       <Route path="/products/:handle" component={Product} />
       <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />
