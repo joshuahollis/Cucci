@@ -10,6 +10,8 @@ import Intimates from "@/pages/Intimates";
 import Product from "@/pages/Product";
 import Cart from "@/pages/Cart";
 import Checkout from "@/pages/Checkout";
+import OrderConfirmation from "@/pages/OrderConfirmation";
+import Policy from "@/pages/Policy";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -23,6 +25,11 @@ function Router() {
       <Route path="/products/:handle" component={Product} />
       <Route path="/cart" component={Cart} />
       <Route path="/checkout" component={Checkout} />
+      <Route path="/order-confirmation" component={OrderConfirmation} />
+      <Route path="/privacy">{() => <Policy kind="privacy" />}</Route>
+      <Route path="/terms">{() => <Policy kind="terms" />}</Route>
+      <Route path="/shipping">{() => <Policy kind="shipping" />}</Route>
+      <Route path="/returns">{() => <Policy kind="returns" />}</Route>
       <Route path="/gallery" component={Gallery} />
       <Route path="/cuccicare" component={CucciCare} />
       <Route path="/intimates" component={Intimates} />

@@ -46,6 +46,9 @@ jobs:
           PORT: 5173
           # Custom domain (ilovecucci.com) serves from site root
           BASE_PATH: /
+          # Public Stripe + API URL only — never put STRIPE_SECRET_KEY here
+          VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
         run: pnpm --filter @workspace/cucci run build
 
       - name: Add SPA 404 fallback
