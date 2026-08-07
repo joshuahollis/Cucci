@@ -47,3 +47,13 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+
+# Local pnpm cache
+.pnpm-store/
+
+# Local environment files
+artifacts/api-server/.env
+artifacts/cucci/.env.local
+
+# Local build output
+artifacts/cucci/dist-local/
