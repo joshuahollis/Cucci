@@ -1,0 +1,20 @@
+# Local Wrangler secrets — copy to .dev.vars (gitignored). Never commit real keys.
+# Production: wrangler secret put / Cloudflare Dashboard → cucci-api → Secrets
+
+NODE_ENV=development
+PUBLIC_SITE_URL=http://127.0.0.1:5175
+CORS_ORIGINS=http://127.0.0.1:5175,http://localhost:5175
+
+# Runtime (Workers use Supabase HTTPS — not TCP DATABASE_URL)
+SUPABASE_URL=https://xxxx.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=eyJ...
+
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+STRIPE_STANDARD_SHIPPING_RATE_ID=shr_...
+STRIPE_STANDARD_SHIPPING_AMOUNT_CENTS=800
+STRIPE_ALLOW_PROMOTION_CODES=false
+STRIPE_AUTOMATIC_TAX_ENABLED=false
+
+# Optional — drizzle-kit / seed only (not Worker runtime)
+# DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/postgres

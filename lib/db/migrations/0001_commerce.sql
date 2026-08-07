@@ -1,0 +1,11 @@
+-- Reference migration for Cucci commerce (Drizzle is the source of truth).
+-- Prefer: pnpm --filter @workspace/db push
+-- This file documents the intended tables for operators.
+
+-- Enums + tables are created by drizzle-kit push from lib/db/src/schema/index.ts:
+--   products, variants, orders, order_items, inventory_reservations, webhook_events
+--
+-- Critical inventory rule enforced in application SQL:
+--   UPDATE variants SET inventory_reserved = inventory_reserved + :qty
+--   WHERE (inventory_on_hand - inventory_reserved) >= :qty
+--   (row lock FOR UPDATE before reserve)
