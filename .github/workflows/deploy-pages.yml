@@ -23,9 +23,7 @@ jobs:
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11.0.8
-
+       
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -35,7 +33,7 @@ jobs:
       - name: Install dependencies
         env:
           # Satisfy workspace preinstall check (expects npm_config_user_agent to start with pnpm/)
-          npm_config_user_agent: pnpm/11.0.8
+          npm_config_user_agent: pnpm/10.11.1
         run: pnpm install --frozen-lockfile
 
       - name: Typecheck app
