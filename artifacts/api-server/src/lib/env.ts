@@ -59,25 +59,33 @@ export function validateProductionEnv(): void {
     );
   }
 
-  const site = process.env.PUBLIC_SITE_URL!;
+  // Trim before format checks — wrangler secret values often include a trailing newline.
+  const site = process.env.PUBLIC_SITE_URL!.trim();
   if (!/^https?:\/\//i.test(site)) {
     throw new Error("PUBLIC_SITE_URL must be an absolute http(s) URL");
   }
+  process.env.PUBLIC_SITE_URL = site;
 
-  const sk = process.env.STRIPE_SECRET_KEY!;
+  const sk = process.env.STRIPE_SECRET_KEY!.trim();
   if (!sk.startsWith("sk_test_") && !sk.startsWith("sk_live_")) {
     throw new Error("STRIPE_SECRET_KEY must start with sk_test_ or sk_live_");
   }
+  process.env.STRIPE_SECRET_KEY = sk;
 
-  const wh = process.env.STRIPE_WEBHOOK_SECRET!;
+  const wh = process.env.STRIPE_WEBHOOK_SECRET!.trim();
   if (!wh.startsWith("whsec_")) {
     throw new Error("STRIPE_WEBHOOK_SECRET must start with whsec_");
   }
+  process.env.STRIPE_WEBHOOK_SECRET = wh;
 
-  const supabaseUrl = process.env.SUPABASE_URL!;
+  const supabaseUrl = process.env.SUPABASE_URL!.trim();
   if (!/^https:\/\//i.test(supabaseUrl)) {
     throw new Error("SUPABASE_URL must be an https:// URL");
   }
+  process.env.SUPABASE_URL = supabaseUrl;
+
+  const serviceRole = process.env.SUPABASE_SERVICE_ROLE_KEY!.trim();
+  process.env.SUPABASE_SERVICE_ROLE_KEY = serviceRole;
 
   if (isProd && cors) {
     const origins = cors.split(",").map((s) => s.trim()).filter(Boolean);
@@ -91,5 +99,6 @@ export function validateProductionEnv(): void {
         throw new Error("CORS_ORIGINS entries must use https:// in production");
       }
     }
+    process.env.CORS_ORIGINS = origins.join(",");
   }
 }

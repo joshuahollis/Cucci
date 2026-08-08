@@ -69,4 +69,17 @@ describe("validateProductionEnv", () => {
     process.env.PUBLIC_SITE_URL = "http://127.0.0.1:5175";
     assert.doesNotThrow(() => validateProductionEnv());
   });
+
+  it("accepts Stripe secrets with trailing newlines (wrangler secret paste)", () => {
+    process.env.NODE_ENV = "production";
+    process.env.SUPABASE_URL = "https://xxxx.supabase.co\n";
+    process.env.SUPABASE_SERVICE_ROLE_KEY = "eyJtest\n";
+    process.env.STRIPE_SECRET_KEY = "sk_live_x\n";
+    process.env.STRIPE_WEBHOOK_SECRET = "whsec_x\n";
+    process.env.PUBLIC_SITE_URL = "https://ilovecucci.com\n";
+    process.env.CORS_ORIGINS =
+      "https://ilovecucci.com,https://www.ilovecucci.com";
+    assert.doesNotThrow(() => validateProductionEnv());
+    assert.equal(process.env.STRIPE_SECRET_KEY, "sk_live_x");
+  });
 });
