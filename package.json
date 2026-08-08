@@ -2,6 +2,7 @@
   "name": "workspace",
   "version": "0.0.0",
   "license": "MIT",
+  "packageManager": "pnpm@10.11.1",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "build": "pnpm run typecheck && PORT=8080 BASE_PATH=/ pnpm --filter \"./artifacts/cucci\" run build && pnpm -r --if-present --filter \"!./artifacts/mockup-sandbox\" --filter \"!./artifacts/cucci\" run build",
