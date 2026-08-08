@@ -11,6 +11,13 @@ import {
   type CartLineInput,
 } from "../lib/commerce";
 import { cleanupExpiredReservations } from "../lib/cleanup";
+import {
+  INFRA_CHECKOUT_CODES,
+  logCheckoutFailure,
+  safeStripeError,
+  stripeKeyMode,
+  type CheckoutStage,
+} from "../lib/checkout-errors";
 import { clientIpFromHeaders, rateLimit } from "../lib/rate-limit";
 import { boolEnv, getPublicSiteUrl, getStripe } from "../lib/stripe";
 
@@ -26,6 +33,23 @@ const checkoutBodySchema = z.object({
     .max(20),
   resumeOrderId: z.string().min(1).max(80).optional(),
 });
+
+function isProduction(): boolean {
+  return process.env.NODE_ENV === "production";
+}
+
+function publicCheckoutError(
+  code: string,
+  detailedMessage: string,
+): { error: string; code: string } {
+  if (isProduction() && INFRA_CHECKOUT_CODES.has(code)) {
+    return {
+      error: "Checkout failed. Please try again.",
+      code,
+    };
+  }
+  return { error: detailedMessage, code };
+}
 
 export async function catalogAvailabilityHandler(c: Context): Promise<Response> {
   try {
@@ -74,10 +98,15 @@ export async function checkoutSessionHandler(c: Context): Promise<Response> {
     );
   }
 
+  let stage: CheckoutStage = "input_validation";
+  let orderId: string | undefined;
+
   try {
+    stage = "cleanup_expired_reservations";
     await cleanupExpiredReservations();
 
     if (parsed.data.resumeOrderId) {
+      stage = "stripe_session_retrieve";
       const resumed = await tryResumeCheckout(
         parsed.data.resumeOrderId,
         parsed.data.items,
@@ -87,7 +116,11 @@ export async function checkoutSessionHandler(c: Context): Promise<Response> {
       }
     }
 
+    stage = "create_pending_checkout_rpc";
     const prepared = await createPendingCheckout(parsed.data.items);
+    orderId = prepared.orderId;
+
+    stage = "shipping_configuration";
     const stripe = getStripe();
     const siteUrl = getPublicSiteUrl();
     const expiresAtUnix = Math.floor(prepared.expiresAt.getTime() / 1000);
@@ -114,6 +147,7 @@ export async function checkoutSessionHandler(c: Context): Promise<Response> {
             },
           ];
 
+    const usingPriceIds = prepared.lineItems.filter((l) => Boolean(l.stripePriceId));
     const lineItems = prepared.lineItems.map((line) => {
       if (line.stripePriceId) {
         return { price: line.stripePriceId, quantity: line.quantity };
@@ -136,6 +170,7 @@ export async function checkoutSessionHandler(c: Context): Promise<Response> {
       };
     });
 
+    stage = "stripe_checkout_session_create";
     let session;
     try {
       session = await stripe.checkout.sessions.create(
@@ -170,31 +205,45 @@ export async function checkoutSessionHandler(c: Context): Promise<Response> {
         },
       );
     } catch (stripeErr) {
-      await releaseReservationsForOrder(prepared.orderId);
-      console.error(
-        "stripe session create failed",
-        stripeErr instanceof Error ? stripeErr.message : "unknown",
+      await releaseReservationsForOrder(prepared.orderId).catch((releaseErr) => {
+        logCheckoutFailure("stripe_checkout_session_create", releaseErr, {
+          orderId: prepared.orderId,
+          message: "failed to release reservations after Stripe error",
+        });
+      });
+      const stripe = safeStripeError(stripeErr);
+      logCheckoutFailure("stripe_checkout_session_create", stripeErr, {
+        orderId: prepared.orderId,
+        orderNumber: prepared.orderNumber,
+        stripeMode: stripeKeyMode(),
+        shippingRateUsed: Boolean(shippingRateId?.startsWith("shr_")),
+        catalogPriceIdCount: usingPriceIds.length,
+        lineItemCount: prepared.lineItems.length,
+        variantIds: prepared.lineItems.map((l) => l.variantId),
+      });
+      const body = publicCheckoutError(
+        "stripe_checkout_session_create",
+        stripe.message ?? "Unable to start checkout. Please try again.",
       );
-      return c.json(
-        {
-          error: "Unable to start checkout. Please try again.",
-          code: "stripe_session_failed",
-        },
-        502,
-      );
+      return c.json(body, 502);
     }
 
     if (!session.client_secret) {
-      await releaseReservationsForOrder(prepared.orderId);
+      await releaseReservationsForOrder(prepared.orderId).catch(() => undefined);
+      logCheckoutFailure("stripe_checkout_session_create", null, {
+        orderId: prepared.orderId,
+        message: "missing client_secret on Checkout Session",
+      });
       return c.json(
-        {
-          error: "Unable to start checkout. Please try again.",
-          code: "missing_client_secret",
-        },
+        publicCheckoutError(
+          "missing_client_secret",
+          "Unable to start checkout. Please try again.",
+        ),
         502,
       );
     }
 
+    stage = "order_update_after_stripe";
     await updateOrderSessionId(prepared.orderId, session.id);
 
     return c.json({
@@ -205,20 +254,38 @@ export async function checkoutSessionHandler(c: Context): Promise<Response> {
     });
   } catch (err) {
     if (err instanceof CheckoutError) {
-      return c.json(
-        {
-          error: err.message,
+      const stageFromCode: CheckoutStage =
+        err.code === "cleanup_expired_reservations" ||
+        err.code === "create_pending_checkout_rpc" ||
+        err.code === "shipping_configuration" ||
+        err.code === "stripe_checkout_session_create" ||
+        err.code === "order_update_after_stripe"
+          ? err.code
+          : stage;
+
+      if (INFRA_CHECKOUT_CODES.has(err.code) || err.status >= 500) {
+        logCheckoutFailure(stageFromCode, err, {
+          orderId,
           code: err.code,
-          lines: err.lines,
-        },
-        err.status as 400 | 409 | 500,
-      );
+          message: err.message,
+          variantIds: err.lines?.map((l) => l.variantId),
+        });
+      }
+      const body = {
+        ...publicCheckoutError(err.code, err.message),
+        ...(err.lines ? { lines: err.lines } : {}),
+      };
+      return c.json(body, err.status as 400 | 409 | 500);
     }
-    console.error(
-      "checkout session error",
-      err instanceof Error ? err.message : "unknown",
+
+    logCheckoutFailure(stage, err, { orderId });
+    return c.json(
+      {
+        error: "Checkout failed. Please try again.",
+        code: stage === "input_validation" ? "unknown" : stage,
+      },
+      500,
     );
-    return c.json({ error: "Checkout failed. Please try again." }, 500);
   }
 }
 
@@ -279,7 +346,8 @@ async function tryResumeCheckout(
         : new Date()
       ).toISOString(),
     };
-  } catch {
+  } catch (err) {
+    logCheckoutFailure("stripe_session_retrieve", err, { orderId: order.id });
     return null;
   }
 }

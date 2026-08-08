@@ -6,6 +6,7 @@ import {
   newOrderNumber,
 } from "./ids";
 import { getSupabase } from "./supabase";
+import { logCheckoutFailure } from "./checkout-errors";
 
 export type CartLineInput = { variantId: string; quantity: number };
 
@@ -64,7 +65,11 @@ export async function releaseReservationsForOrder(orderId: string): Promise<void
     p_order_id: orderId,
   });
   if (error) {
-    throw new Error(`release_reservations_for_order: ${error.message}`);
+    throw new CheckoutError(
+      500,
+      "release_reservations_for_order",
+      `release_reservations_for_order: ${error.message}`,
+    );
   }
 }
 
@@ -73,7 +78,11 @@ export async function convertReservationsForOrder(orderId: string): Promise<void
     p_order_id: orderId,
   });
   if (error) {
-    throw new Error(`convert_reservations_for_order: ${error.message}`);
+    throw new CheckoutError(
+      500,
+      "convert_reservations_for_order",
+      `convert_reservations_for_order: ${error.message}`,
+    );
   }
 }
 
@@ -156,12 +165,30 @@ export async function createPendingCheckout(
   });
 
   if (error) {
-    throw new Error(`create_pending_checkout: ${error.message}`);
+    logCheckoutFailure("create_pending_checkout_rpc", error, {
+      orderId,
+      variantIds: lines.map((l) => l.variantId),
+      supabaseCode: error.code,
+      message: error.message,
+    });
+    throw new CheckoutError(
+      500,
+      "create_pending_checkout_rpc",
+      `create_pending_checkout: ${error.message}`,
+    );
   }
 
   const result = data as RpcCheckoutResult;
   if (!result || typeof result !== "object") {
-    throw new Error("create_pending_checkout: empty RPC response");
+    logCheckoutFailure("create_pending_checkout_rpc", null, {
+      orderId,
+      message: "empty RPC response",
+    });
+    throw new CheckoutError(
+      500,
+      "create_pending_checkout_rpc",
+      "create_pending_checkout: empty RPC response",
+    );
   }
 
   if (!result.ok) {
@@ -337,5 +364,16 @@ export async function updateOrderSessionId(
       updated_at: new Date().toISOString(),
     })
     .eq("id", orderId);
-  if (error) throw new Error(`updateOrderSessionId: ${error.message}`);
+  if (error) {
+    logCheckoutFailure("order_update_after_stripe", error, {
+      orderId,
+      supabaseCode: error.code,
+      message: error.message,
+    });
+    throw new CheckoutError(
+      500,
+      "order_update_after_stripe",
+      `updateOrderSessionId: ${error.message}`,
+    );
+  }
 }
