@@ -26,13 +26,6 @@
   "workers_dev": true,
   "preview_urls": true,
 
-  "routes": [
-    {
-      "pattern": "api.ilovecucci.com",
-      "custom_domain": true
-    }
-  ],
-
   // Non-secret configuration (safe to commit).
   "vars": {
     "NODE_ENV": "production",
