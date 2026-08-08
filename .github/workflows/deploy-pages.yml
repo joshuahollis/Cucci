@@ -46,9 +46,13 @@ jobs:
           VITE_STRIPE_PUBLISHABLE_KEY: ${{ secrets.VITE_STRIPE_PUBLISHABLE_KEY }}
           VITE_API_URL: https://api.ilovecucci.com
         run: pnpm --filter @workspace/cucci run build
-        
-      - name: Add SPA 404 fallback
-        run: cp artifacts/cucci/dist/public/index.html artifacts/cucci/dist/public/404.html
+
+      - name: Verify SPA 404 fallback
+        run: |
+          test -f artifacts/cucci/dist/public/404.html
+          test -f artifacts/cucci/dist/public/index.html
+          grep -q 'pathSegmentsToKeep' artifacts/cucci/dist/public/404.html
+          grep -q 'history.replaceState' artifacts/cucci/dist/public/index.html
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
