@@ -1,38 +1,76 @@
 /**
- * Cloudflare Worker: cucci-api (Hono + nodejs_compat)
+ * Cloudflare Worker: cucci-api
  *
- * Custom domain: api.ilovecucci.com
- * Frontend Worker (separate): cucci → https://ilovecucci.com
+ * Custom domain:
+ *   api.ilovecucci.com
  *
- * Secrets (Dashboard / `wrangler secret put` — never commit):
+ * Frontend:
+ *   https://ilovecucci.com
+ *
+ * Secrets — configure in Cloudflare Dashboard or with `wrangler secret put`.
+ * NEVER commit these:
+ *
  *   STRIPE_SECRET_KEY
  *   STRIPE_WEBHOOK_SECRET
- *   SUPABASE_URL                 (HTTPS API — required at runtime)
- *   SUPABASE_SERVICE_ROLE_KEY    (required at runtime)
- *   STRIPE_STANDARD_SHIPPING_RATE_ID  (optional if amount fallback is used)
- *   DATABASE_URL                 (optional; drizzle-kit / seed only — NOT used for
- *                                 Worker TCP. Direct node-postgres is incompatible
- *                                 with Workers without Hyperdrive.)
+ *   SUPABASE_SERVICE_ROLE_KEY
  *
- * Before first commerce traffic, apply:
+ * Optional secret:
+ *   STRIPE_STANDARD_SHIPPING_RATE_ID
+ *
+ * Optional tooling-only variable:
+ *   DATABASE_URL
+ *
+ * DATABASE_URL is NOT used by the Cloudflare Worker at runtime.
+ * Supabase is accessed over HTTPS.
+ *
+ * Before commerce traffic, apply:
  *   lib/db/migrations/0002_commerce_rpcs.sql
  */
+
 {
   "$schema": "node_modules/wrangler/config-schema.json",
+
   "name": "cucci-api",
   "main": "src/index.ts",
+
   "compatibility_date": "2026-08-07",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
+
   "workers_dev": true,
   "preview_urls": true,
 
-  // Non-secret configuration (safe to commit).
+  /*
+   * Preserve variables configured through the Cloudflare Dashboard
+   * when Wrangler deploys this Worker.
+   */
+  "keep_vars": true,
+
+  /*
+   * Non-secret runtime configuration.
+   * These values are safe to commit.
+   */
   "vars": {
     "NODE_ENV": "production",
+
     "PUBLIC_SITE_URL": "https://ilovecucci.com",
+
     "CORS_ORIGINS": "https://ilovecucci.com,https://www.ilovecucci.com",
+
+    "SUPABASE_URL": "https://iwxldvrwlbxdacpoqofq.supabase.co",
+
     "STRIPE_STANDARD_SHIPPING_AMOUNT_CENTS": "800",
+
     "STRIPE_ALLOW_PROMOTION_CODES": "false",
+
     "STRIPE_AUTOMATIC_TAX_ENABLED": "false"
+  },
+
+  "observability": {
+    "enabled": true,
+    "logs": {
+      "enabled": true
+    }
   }
 }
