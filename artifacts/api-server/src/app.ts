@@ -5,6 +5,7 @@ import {
   catalogAvailabilityHandler,
   checkoutSessionHandler,
 } from "./routes/checkout";
+import { healthzHandler } from "./routes/healthz";
 import { orderStatusBySessionHandler } from "./routes/order-status";
 import { stripeWebhookHandler } from "./routes/webhook";
 
@@ -20,12 +21,19 @@ export function createApp() {
   // Liveness — no secrets required (platform probes).
   app.get("/health", (c) => c.json({ status: "ok" }));
 
+  // Bind Worker env for all non-liveness routes. /api/healthz is a readiness
+  // probe: it applies env but must not throw from validateProductionEnv so it
+  // can return structured JSON diagnostics instead of a bare 500.
   app.use("*", async (c, next) => {
     if (c.req.path === "/health") {
       await next();
       return;
     }
     applyWorkerEnv(c.env);
+    if (c.req.path === "/api/healthz") {
+      await next();
+      return;
+    }
     if (!envValidated) {
       validateProductionEnv();
       envValidated = true;
@@ -63,7 +71,7 @@ export function createApp() {
     return handler(c, next);
   });
 
-  app.get("/api/healthz", (c) => c.json({ status: "ok" }));
+  app.get("/api/healthz", (c) => healthzHandler(c));
 
   // Raw body required — do not parse JSON before signature verification.
   app.post("/api/stripe/webhook", async (c) => {
