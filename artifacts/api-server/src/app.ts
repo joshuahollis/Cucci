@@ -36,6 +36,13 @@ function envPresenceFlags() {
   };
 }
 
+function allowedCorsOrigins(): string[] {
+  return (process.env.CORS_ORIGINS ?? "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+}
+
 export function createApp() {
   const app = new Hono<AppEnv>();
 
@@ -58,18 +65,55 @@ export function createApp() {
   // Liveness — no secrets required (platform probes).
   app.get("/health", (c) => c.json({ status: "ok" }));
 
-  // Bind Worker env for all non-liveness routes. /api/healthz is a readiness
-  // probe: it applies env but must not throw from validateProductionEnv so it
-  // can return structured JSON diagnostics instead of a bare 500.
+  // 1) Bind Worker env (vars + secrets → process.env). No validation yet.
+  //    Needed so CORS can read CORS_ORIGINS / NODE_ENV from bindings.
   app.use("*", async (c, next) => {
     if (c.req.path === "/health") {
       await next();
       return;
     }
-
     applyWorkerEnv(c.env);
+    await next();
+    return;
+  });
 
-    if (c.req.path === "/api/healthz") {
+  // 2) CORS — must run BEFORE validateProductionEnv so OPTIONS preflight
+  //    never requires Stripe/Supabase secrets.
+  app.use("*", async (c, next) => {
+    if (c.req.path === "/health") {
+      await next();
+      return;
+    }
+    const isProd = process.env.NODE_ENV === "production";
+    const origins = allowedCorsOrigins();
+
+    const handler = cors({
+      origin: (origin) => {
+        if (!origin) return origin;
+        if (origins.includes(origin)) return origin;
+        if (
+          !isProd &&
+          /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+        ) {
+          return origin;
+        }
+        return null;
+      },
+      allowMethods: ["GET", "POST", "OPTIONS"],
+      allowHeaders: ["Content-Type", "Stripe-Signature", "Authorization"],
+      maxAge: 86400,
+    });
+    return handler(c, next);
+  });
+
+  // 3) Strict production env validation for real API traffic only.
+  //    Skip: /api/healthz readiness, OPTIONS preflight.
+  app.use("*", async (c, next) => {
+    if (c.req.path === "/health" || c.req.path === "/api/healthz") {
+      await next();
+      return;
+    }
+    if (c.req.method === "OPTIONS") {
       await next();
       return;
     }
@@ -95,7 +139,6 @@ export function createApp() {
           name: err instanceof Error ? err.name : "UnknownError",
           message: err instanceof Error ? err.message : String(err),
         });
-        // Do not leave the gate half-open; surface a structured failure.
         return c.json(
           {
             error: "Internal API error.",
@@ -107,36 +150,6 @@ export function createApp() {
     }
     await next();
     return;
-  });
-
-  app.use("*", async (c, next) => {
-    if (c.req.path === "/health") {
-      await next();
-      return;
-    }
-    const isProd = process.env.NODE_ENV === "production";
-    const allowedOrigins = (process.env.CORS_ORIGINS ?? "")
-      .split(",")
-      .map((s) => s.trim())
-      .filter(Boolean);
-
-    const handler = cors({
-      origin: (origin) => {
-        if (!origin) return origin;
-        if (allowedOrigins.includes(origin)) return origin;
-        if (
-          !isProd &&
-          /^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
-        ) {
-          return origin;
-        }
-        return null;
-      },
-      allowMethods: ["GET", "POST", "OPTIONS"],
-      allowHeaders: ["Content-Type", "Stripe-Signature", "Authorization"],
-      maxAge: 86400,
-    });
-    return handler(c, next);
   });
 
   app.get("/api/healthz", (c) => healthzHandler(c));
